@@ -21,7 +21,7 @@
 ## 🛠️ Cara Pakai
 ### 1️⃣ Clone Repository
 ```bash
-git clone https://[github.com/USERNAME/REPO-NAME](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper.git
+git clone https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper.git
 cd myanimelist-nekopoi-scrapper
 ```
 
