@@ -11,8 +11,11 @@
 
 ## 📂 Struktur Project
 ├── MyAnimeList_and_Nekopoi_Scrapper.py # Script utama
+
 ├── requirements.txt # Daftar dependencies
+
 ├── Start.bat # Batch file (installer + runner)
+
 └── README.md # Dokumentasi project
 
 ## 🛠️ Cara Pakai
