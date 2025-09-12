@@ -5,7 +5,7 @@ cd /d %~dp0
 :menu
 cls
 echo ===================================
-echo   MyAnimeList & Nekopoi Scrapper
+echo  MyAnimeList and Nekopoi Scrapper
 echo ===================================
 echo.
 echo 1. Jalankan Scraper
