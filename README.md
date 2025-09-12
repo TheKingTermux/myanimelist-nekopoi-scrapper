@@ -19,11 +19,14 @@
 └── README.md # Dokumentasi project
 
 ## 🛠️ Cara Pakai
-### 1️⃣ Clone Repository
+### 1️⃣ Clone Repository or Download .zip
 ```bash
 git clone https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper.git
 cd myanimelist-nekopoi-scrapper
 ```
+
+[Download Latest Release](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
+
 
 ### 2️⃣ Jalankan Batch File
 Cukup klik 2x `Start.bat` maka tools akan langsung bekerja
