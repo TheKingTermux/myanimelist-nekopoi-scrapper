@@ -1,4 +1,4 @@
-# 🎬 MyAnimeList & Nekopoi Scrapper  
+# 🎬 MyAnimeList & Nekopoi Scrapper [Still BETA]
 > Scraper otomatis untuk mengumpulkan data dari MyAnimeList & Nekopoi, dibuat dengan Python + Requests + BeautifulSoup.  
 > Dibungkus dengan `.bat` installer supaya gampang dijalankan siapa aja 🚀
 
