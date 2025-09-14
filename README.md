@@ -3,9 +3,9 @@
 > Dibungkus dengan `.bat` installer supaya gampang dijalankan siapa aja 🚀
 
 ## ✨ Fitur
-- 🔍 Scrape data anime/manga dari **MyAnimeList**  
-- 🔞 Scrape metadata dari **Nekopoi**  
-- ⚡ Auto setup: kalau Python belum terinstall, script `.bat` akan download & install otomatis  
+- 🔍 Scrape data anime seasonal (Normal, Erotica, Hentai) dari **MyAnimeList**  
+- 🔞 Scrape hentai metadata dari **NekoPoi**  
+- ⚡ Auto setup: Jika Python belum terinstall, script akan mendownload, menginstall kemudian menghapus file instalasi Python yang didownload secara otomatis  
 - 📦 Auto install semua library yang dibutuhkan (`requirements.txt`)  
 - 🔁 Menu interaktif untuk jalankan scraper atau install requirement  
 
@@ -19,17 +19,16 @@
 └── README.md # Dokumentasi project
 
 ## 🛠️ Cara Pakai
-### 1️⃣ Clone Repository or Download .zip
+### 1️⃣ Clone Repository atau Download `.zip`
 ```bash
 git clone https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper.git
 cd myanimelist-nekopoi-scrapper
 ```
 
-[Download Latest Release](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
-
+[Download Latest Release (.zip)](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
 
 ### 2️⃣ Jalankan Batch File
-Cukup klik 2x `Start.bat` maka tools akan langsung bekerja
+Cukup klik 2x `Start.bat` maka tools akan langsung bekerja secara otomatis 
 
 ### 3️⃣ Pilihan di Menu
 
