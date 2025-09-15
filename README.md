@@ -1,4 +1,4 @@
-👉 **[Versi Bahasa Inggris](./README.en.md)**
+👉 **[English Version](./README.en.md)**
 
 # 🎬 MyAnimeList & Nekopoi Scrapper
 
