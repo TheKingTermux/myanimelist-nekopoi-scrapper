@@ -10,7 +10,11 @@
 - 🔁 Menu interaktif untuk jalankan scraper atau install requirement  
 
 ## 📂 Struktur Project
+├── LICENSE # Lisensi
+
 ├── MyAnimeList_and_Nekopoi_Scrapper.py # Script utama
+
+├── MyAnimeList_and_Nekopoi_Scrapper_English.py # Script utama versi Bahasa Inggris
 
 ├── requirements.txt # Daftar dependencies
 
