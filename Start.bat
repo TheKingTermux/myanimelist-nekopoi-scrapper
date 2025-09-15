@@ -21,7 +21,7 @@ echo                  ^|      [3] Exit                                          
 echo                  ^|_______________________________________________________________^|
 
 echo:
-set /p pil= Masukkan Pilihan Anda [1-4] : 
+set /p pil= Masukkan Pilihan Anda [1-3] : 
 
 if "%pil%"=="1" goto RunCheck
 if "%pil%"=="2" goto InstallReq
