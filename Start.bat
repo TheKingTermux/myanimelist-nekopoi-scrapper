@@ -6,7 +6,7 @@ setlocal EnableDelayedExpansion
 :MainMenu
 cls
 echo.
-echo                                MyAnimeList & Nekopoi Scrapper Loader
+echo                               MyAnimeList and Nekopoi Scrapper Loader
 echo                                   Developer : TheKingTermux-Sama
 echo.
 echo                   _______________________________________________________________
