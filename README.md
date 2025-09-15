@@ -1,4 +1,11 @@
+👉 **[Versi Bahasa Inggris](./README.en.md)**
+
 # 🎬 MyAnimeList & Nekopoi Scrapper [Still BETA]
+
+[![Python](https://img.shields.io/badge/Python-3.13.3-blue?logo=python)](https://www.python.org/)
+[![Status](https://img.shields.io/badge/Status-BETA-orange)]()
+[![Dibuat dengan ❤️](https://img.shields.io/badge/Dibuat%20dengan-%E2%9D%A4-red)]()
+
 > Scraper otomatis untuk mengumpulkan data dari MyAnimeList & Nekopoi, dibuat dengan Python + Requests + BeautifulSoup.  
 > Dibungkus dengan `.bat` installer supaya gampang dijalankan siapa aja 🚀
 
@@ -10,26 +17,24 @@
 - 🔁 Menu interaktif untuk jalankan scraper atau install requirement  
 
 ## 📂 Struktur Project
-├── LICENSE # Lisensi
+```
+├── LISENSI                                     # Lisensi
+├── MyAnimeList_and_Nekopoi_Scrapper.py         # Skrip utama (versi Indonesia)
+├── MyAnimeList_and_Nekopoi_Scrapper_English.py # Skrip utama (versi bahasa Inggris)
+├── requirements.txt                            # Dependensi
+├── Start.bat                                   # Berkas batch (installer + runner)
+└── README.md dan README.en.md                  # Dokumentasi proyek
+```
 
-├── MyAnimeList_and_Nekopoi_Scrapper.py # Script utama
+## 🛠️ Cara Penggunaan
 
-├── MyAnimeList_and_Nekopoi_Scrapper_English.py # Script utama versi Bahasa Inggris
-
-├── requirements.txt # Daftar dependencies
-
-├── Start.bat # Batch file (installer + runner)
-
-└── README.md # Dokumentasi project
-
-## 🛠️ Cara Pakai
-### 1️⃣ Clone Repository atau Download `.zip`
-```bash
+### 1️⃣ Kloning Repositori atau Unduh .zip
+```
 git clone https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper.git
 cd myanimelist-nekopoi-scrapper
 ```
 
-[Download Latest Release (.zip)](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
+### ⬇️ [Unduh Rilis Terbaru (.zip)](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
 
 ### 2️⃣ Jalankan Batch File
 Cukup klik 2x `Start.bat` maka tools akan langsung bekerja secara otomatis 
