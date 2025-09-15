@@ -588,7 +588,7 @@ def main():
     """Main function."""
     logging.info("="*65)
     logging.info("               MyAnimeList and NekoPoi SCRAPPER")
-    logging.info("               VERSION 9.7 BETA - TheKingTermux")
+    logging.info("                  VERSION 10 - TheKingTermux")
     logging.info("="*65)
     logging.info("   This script will fetch seasonal anime data from MyAnimeList")
     logging.info("     Normal and Hentai and will fetch Hentai anime data from")
@@ -692,4 +692,5 @@ def main():
     logging.info("="*50)
 
 if __name__ == "__main__":
+
     main()

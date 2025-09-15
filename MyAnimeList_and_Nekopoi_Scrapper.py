@@ -588,7 +588,7 @@ def main():
     """Fungsi utama."""
     logging.info("="*65)
     logging.info("               MyAnimeList dan NekoPoi SCRAPPER")
-    logging.info("                VERSI 9.7 BETA - TheKingTermux")
+    logging.info("                   VERSI 10 - TheKingTermux")
     logging.info("="*65)
     logging.info(" Script ini akan mengambil data anime seasonal dari MyAnimeList")
     logging.info(" Normal maupun Hentai dan akan mengambil data anime Hentai dari")
