@@ -1,6 +1,6 @@
 👉 **[Versi Bahasa Indonesia](./README.md)**
 
-# 🎬 MyAnimeList & Nekopoi Scrapper [Still BETA]
+# 🎬 MyAnimeList & Nekopoi Scrapper
 
 [![Python](https://img.shields.io/badge/Python-3.13.3-blue?logo=python)](https://www.python.org/)
 [![Status](https://img.shields.io/badge/Status-BETA-orange)]()
