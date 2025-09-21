@@ -48,7 +48,7 @@ def translate_month(date_str):
         'Jul': 'Juli', 'Aug': 'Agustus', 'Sep': 'September',
         'Oct': 'Oktober', 'Nov': 'November', 'Dec': 'Desember'
     }
-    # Sort by length descending and replace whole words only
+    # Urutkan berdasarkan panjang menurun dan ganti seluruh kata saja
     for eng, indo in sorted(month_translation.items(), key=lambda x: len(x[0]), reverse=True):
         date_str = re.sub(r'\b' + re.escape(eng) + r'\b', indo, date_str)
     return date_str
@@ -61,9 +61,9 @@ def parse_date_flexible(date_str):
         return datetime.strptime(date_str, '%b %d, %Y')
     except ValueError:
         try:
-            # For partial dates like 'Dec 2025'
+            # Untuk tanggal parsial seperti 'Des 2025'
             partial = datetime.strptime(date_str, '%b %Y')
-            # Assume day 1 for sorting
+            # Asumsikan hari ke-1 untuk penyortiran
             return partial.replace(day=1)
         except ValueError:
             return None
@@ -629,7 +629,7 @@ def main():
     """Fungsi utama."""
     logging.info("="*65)
     logging.info("               MyAnimeList dan NekoPoi SCRAPPER")
-    logging.info("                VERSI 11 BETA - TheKingTermux")
+    logging.info("                   VERSI 11 - TheKingTermux")
     logging.info("="*65)
     logging.info(" Script ini akan mengambil data anime seasonal dari MyAnimeList")
     logging.info(" Normal maupun Hentai dan akan mengambil data anime Hentai dari")
