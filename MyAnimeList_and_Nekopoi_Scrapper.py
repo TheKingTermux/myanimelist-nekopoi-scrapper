@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 # Flag global untuk animasi loading
 loading_active = False
 
-def loading_animation(message="🔄 Processing..."):
+def loading_animation(message="🔄 Memproses..."):
     """Menampilkan animasi loading dengan spinner pada baris tersendiri"""
     spinner = ['|', '/', '-', '\\']
     i = 0
@@ -42,11 +42,31 @@ def translate_month(date_str):
         'January': 'Januari', 'February': 'Februari', 'March': 'Maret',
         'April': 'April', 'May': 'Mei', 'June': 'Juni',
         'July': 'Juli', 'August': 'Agustus', 'September': 'September',
-        'October': 'Oktober', 'November': 'November', 'December': 'Desember'
+        'October': 'Oktober', 'November': 'November', 'December': 'Desember',
+        'Jan': 'Januari', 'Feb': 'Februari', 'Mar': 'Maret',
+        'Apr': 'April', 'May': 'Mei', 'Jun': 'Juni',
+        'Jul': 'Juli', 'Aug': 'Agustus', 'Sep': 'September',
+        'Oct': 'Oktober', 'Nov': 'November', 'Dec': 'Desember'
     }
-    for eng, indo in month_translation.items():
-        date_str = date_str.replace(eng, indo)
+    # Sort by length descending and replace whole words only
+    for eng, indo in sorted(month_translation.items(), key=lambda x: len(x[0]), reverse=True):
+        date_str = re.sub(r'\b' + re.escape(eng) + r'\b', indo, date_str)
     return date_str
+
+def parse_date_flexible(date_str):
+    """Mengurai string tanggal dengan format yang fleksibel."""
+    if date_str == 'Unknown':
+        return None
+    try:
+        return datetime.strptime(date_str, '%b %d, %Y')
+    except ValueError:
+        try:
+            # For partial dates like 'Dec 2025'
+            partial = datetime.strptime(date_str, '%b %Y')
+            # Assume day 1 for sorting
+            return partial.replace(day=1)
+        except ValueError:
+            return None
 
 def parse_member_count(members_text):
     """Mengonversi teks jumlah anggota (seperti '10K') menjadi bilangan bulat."""
@@ -257,7 +277,7 @@ def scrape_nekopoi():
         return {}, "Unknown"
 
 def scrape_mal_seasonal(url):
-    """Fungsi scraping utama."""
+    """Fungsi scraping utama untuk halaman musiman MyAnimeList."""
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
@@ -433,7 +453,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 
             # Urutkan tanggal secara kronologis
             def parse_indo_date(date_str):
-                """Parse Indonesian date format like '27 Juni 2025' to datetime for sorting"""
+                """Mengurai format tanggal Indonesia seperti '27 Juni 2025' ke datetime untuk pengurutan"""
                 month_map = {
                     'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
                     'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
@@ -468,9 +488,9 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
         else:
             filtered_anime_data = {
                 date: animes for date, animes in anime_data.items()
-                if date != 'Unknown' and datetime.strptime(date, '%b %d, %Y').year >= filter_year
+                if date != 'Unknown' and (parsed := parse_date_flexible(date)) and parsed.year >= filter_year
             }
-            sorted_dates = sorted(filtered_anime_data.items(), key=lambda x: datetime.strptime(x[0], '%b %d, %Y'))
+            sorted_dates = sorted(filtered_anime_data.items(), key=lambda x: parse_date_flexible(x[0]) or datetime.min)
 
             from collections import defaultdict
 
@@ -521,6 +541,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
                             category = anime.get('category', 'Unknown')
                             normal_by_category[category].append({
                                 'date': anime['translated_date'],
+                                'original_date': anime['date'],
                                 'title': anime['title'],
                                 'genres': combined_genre_info,
                                 'studio': anime['studio'],
@@ -568,27 +589,47 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
             f.write("*𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝*\n")
             f.write("=" * 50 + "\n")
             for cat in category_order:
+                f.write(f"\n- *{cat}:*\n")
                 if cat in normal_by_category and normal_by_category[cat]:
-                    f.write(f"\n  - *{cat}:*\n")
+                    from collections import defaultdict
+                    group_dict = defaultdict(list)
+                    groups = []
                     for anime in normal_by_category[cat]:
-                        f.write(f"  - *{anime['date']}*\n")
-                        f.write(f"  > {anime['title']}\n")
-                        f.write(f"  ! {anime['genres']}\n")
-                        f.write(f"  ^ {anime['studio']}\n")
-                        if anime['eps'] not in {'?', '0', 'unknown', None, ''}:
-                            f.write(f"  + {anime['eps']} eps\n")
-                        if anime['duration'] not in {'?', '0', 'unknown', None, ''}:
-                            f.write(f"  ~ {anime['duration']} menit / eps\n")
-                        f.write("\n")
+                        date_str = anime['original_date']
+                        try:
+                            dt = datetime.strptime(date_str, '%b %d, %Y')
+                            group = f"{dt.day} {translate_month(dt.strftime('%B'))} {dt.year}"
+                        except ValueError:
+                            try:
+                                dt = datetime.strptime(date_str, '%b %Y')
+                                group = f"Tanggal Rilis Tidak Diketahui {translate_month(dt.strftime('%B'))} {dt.year}"
+                            except ValueError:
+                                dt = datetime.min
+                                group = translate_month(date_str)
+                        if group not in [g[0] for g in groups]:
+                            groups.append((group, dt))
+                        group_dict[group].append(anime)
+
+                    groups.sort(key=lambda x: x[1])
+                    for group, _ in groups:
+                        f.write(f"- *{group}*\n")
+                        for anime in group_dict[group]:
+                            f.write(f"> {anime['title']}\n")
+                            f.write(f"! {anime['genres']}\n")
+                            f.write(f"^ {anime['studio']}\n")
+                            if anime['eps'] not in {'?', '0', 'unknown', None, ''}:
+                                f.write(f"+ {anime['eps']} eps\n")
+                            if anime['duration'] not in {'?', '0', 'unknown', None, ''}:
+                                f.write(f"~ {anime['duration']} menit / eps\n")
+                            f.write("\n")
                 else:
-                    f.write(f"\n  - *{cat}:*\n")
-                    f.write("  _*TIDAK ADA*_\n\n")
+                    f.write("_*TIDAK ADA*_\n\n")
 
 def main():
     """Fungsi utama."""
     logging.info("="*65)
     logging.info("               MyAnimeList dan NekoPoi SCRAPPER")
-    logging.info("                   VERSI 10 - TheKingTermux")
+    logging.info("                VERSI 11 BETA - TheKingTermux")
     logging.info("="*65)
     logging.info(" Script ini akan mengambil data anime seasonal dari MyAnimeList")
     logging.info(" Normal maupun Hentai dan akan mengambil data anime Hentai dari")
@@ -617,7 +658,7 @@ def main():
     while not season_choice.isdigit() or int(season_choice) not in seasons:
         print("Input tidak valid. Silakan pilih musim yang valid (1-4).")
         season_choice = input("Silakan pilih musim (1-4): \n")
-        
+
     custom_name = input("\nMasukkan nama file output (kosongkan untuk default 'AnimeList.txt'): \n").strip()
 
     # Minta ambang batas anggota
@@ -630,9 +671,18 @@ def main():
     # Dapatkan musim yang dipilih
     selected_season = seasons[int(season_choice)]
 
+    # Petakan musim Indonesia ke bahasa Inggris untuk URL
+    season_url_map = {
+        "Musim Dingin": "winter",
+        "Semi": "spring",
+        "Panas": "summer",
+        "Gugur": "fall"
+    }
+    url_season = season_url_map.get(selected_season, selected_season)
+
     # Konstruksi URL berdasarkan input pengguna
-    url = f"https://myanimelist.net/anime/season/{year}/{selected_season}"
-    
+    url = f"https://myanimelist.net/anime/season/{year}/{url_season}"
+
     # Sekarang scrape data menggunakan URL yang dibuat secara dinamis
     anime_data, categories = scrape_mal_seasonal(url)
 
@@ -662,7 +712,7 @@ def main():
         if mal_total > 0:
             logging.info(f"   - MyAnimeList: {mal_total} entri")
         if nekopoi_total > 0:
-            logging.info(f"   - Nekopoi: {nekopoi_total} entri")
+            logging.info(f"   - Nekopoi    : {nekopoi_total} entri")
     else:
         logging.error("❌ Gagal mengumpulkan data anime dari kedua sumber")
 
