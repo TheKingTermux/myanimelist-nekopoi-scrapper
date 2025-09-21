@@ -3,7 +3,7 @@
 # 🎬 MyAnimeList & Nekopoi Scrapper
 
 [![Python](https://img.shields.io/badge/Python-3.13.3-blue?logo=python)](https://www.python.org/)
-[![Status](https://img.shields.io/badge/Status-BETA-orange)]()
+![GitHub Release](https://img.shields.io/github/v/release/TheKingTermux/myanimelist-nekopoi-scrapper)
 [![Made with ❤️](https://img.shields.io/badge/Made%20with-%E2%9D%A4-red)]()
 
 > An automatic scraper to collect data from MyAnimeList & Nekopoi, built with Python + Requests + BeautifulSoup.  
