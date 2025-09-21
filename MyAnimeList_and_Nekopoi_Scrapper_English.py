@@ -633,8 +633,8 @@ def main():
     logging.info("                   VERSION 11 - TheKingTermux")
     logging.info("="*65)
     logging.info(" This script will scrape seasonal anime data from MyAnimeList")
-    logging.info(" Normal and Hentai and will scrape Hentai anime data from")
-    logging.info("  NekoPoi and save it in the specified format.\n")
+    logging.info("  Normal and Hentai and will scrape Hentai anime data from")
+    logging.info("       NekoPoi and save it in the specified format.\n")
 
     # Available seasons
     seasons = {
