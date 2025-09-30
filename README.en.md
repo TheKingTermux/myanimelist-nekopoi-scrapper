@@ -40,7 +40,7 @@ cd myanimelist-nekopoi-scrapper
 
 2️⃣ Run the Batch File
 
-Just double click `Start.bat`, the tool will automatically
+Just double click `Start.bat`, the tool will automatically started
 
 3️⃣ Menu Options
 
