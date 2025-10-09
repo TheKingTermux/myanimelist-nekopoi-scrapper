@@ -420,6 +420,7 @@ Disclaimer :
 Semua Normal Anime list dan Sebagian Hentai Anime List diambil dari ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 dan Sebagian Hentai Anime Listmya lagi diambil dari ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 gk smua anime yg muncul w tulis :v
 Intinya w ambil yg menurut w menarik ae :v
 
+Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
 Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n"""
 
