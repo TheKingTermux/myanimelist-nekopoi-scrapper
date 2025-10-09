@@ -421,6 +421,7 @@ Disclaimer :
 All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears we write :v
 Basically we take what we think is interesting :v
 
+Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
 Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n"""
 
