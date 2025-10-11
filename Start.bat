@@ -1,5 +1,5 @@
 @echo off
-title MyAnimeList & Nekopoi Scrapper Loader by TheKingTermux
+title MyAnimeList and Nekopoi Scrapper Loader by TheKingTermux
 cd /d %~dp0
 setlocal EnableDelayedExpansion
 
