@@ -34,7 +34,8 @@ git clone https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper.git
 cd myanimelist-nekopoi-scrapper
 ```
 
-### ⬇️ [Unduh Rilis Terbaru (.zip)](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
+### ⬇️ [Unduh Rilis Terbaru (.zip) Github](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
+### ⬇️ [Unduh Rilis Terbaru (.zip) Backup](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2FTheKingTermux%2Fmyanimelist-nekopoi-scrapper)
 
 ### 2️⃣ Jalankan Batch File
 Cukup klik 2x `Start.bat` maka tools akan langsung bekerja secara otomatis 
