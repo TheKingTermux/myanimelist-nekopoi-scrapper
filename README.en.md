@@ -36,7 +36,8 @@ git clone https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper.git
 cd myanimelist-nekopoi-scrapper
 ```
 
-⬇️ [Download Latest Release (.zip)](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
+⬇️ [Download Latest Release (.zip) Github](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/releases/latest)
+⬇️ [Download Latest Release (.zip) Backup](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2FTheKingTermux%2Fmyanimelist-nekopoi-scrapper)
 
 2️⃣ Run the Batch File
 
