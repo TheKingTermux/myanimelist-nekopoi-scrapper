@@ -1,4 +1,4 @@
-👉 **[Versi Bahasa Indonesia](./README.md)**
+👉 **[Versi Bahasa Indonesia](./README.md)** 👉 **[Confused about security issues and don't trust this script? Please read here for more information](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/issues/9)** 
 
 # 🎬 MyAnimeList & Nekopoi Scrapper
 
