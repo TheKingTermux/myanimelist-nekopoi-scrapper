@@ -143,13 +143,14 @@ def get_anime_data(entry):
 
 def scrape_nekopoi():
     """Mengambil jadwal hentai dari Nekopoi.care"""
+    global loading_active, data_usage, session_data_usage
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
     }
 
-    global loading_active
     try:
+        print_status()
         # Mulai animasi loading di thread terpisah
         loading_active = True
         animation_thread = threading.Thread(target=loading_animation, args=("🔄 Mengambil jadwal hentai Nekopoi...",))
@@ -158,8 +159,10 @@ def scrape_nekopoi():
 
         time.sleep(random.uniform(3, 7))
 
-        response = requests.get("https://nekopoi.care/jadwal-new-hentai/", headers=headers)
+        response = requests.get("https://nekopoi.care/jadwal-new-hentai/", headers=headers, timeout=15)
         response.raise_for_status()
+        data_usage += len(response.content)
+        session_data_usage += len(response.content)
 
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -264,6 +267,7 @@ def scrape_nekopoi():
         # Hentikan animasi loading
         loading_active = False
         time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
+        animation_thread.join()
 
         logging.info(f"\n🔍 Ditemukan entri Nekopoi untuk {len(processed_data)} tanggal")
         return processed_data, last_update
@@ -272,19 +276,42 @@ def scrape_nekopoi():
         # Hentikan animasi loading
         loading_active = False
         time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
+        animation_thread.join()
 
         logging.error(f"❌ Error scraping Nekopoi: {str(e)}")
         return {}, "Unknown"
 
+def print_status():
+    """Print scrapping time, data usage, and current time."""
+    global start_time, data_usage, session_data_usage
+    elapsed = time.time() - start_time
+    minutes = int(elapsed // 60)
+    seconds = int(elapsed % 60)
+    time_str = f"{minutes:02d}:{seconds:02d}"
+    session_kb = session_data_usage // 1024
+    total_kb = data_usage // 1024
+    if session_kb >= 1024:
+        session_mb = session_kb / 1024
+        session_str = f"{session_mb:.2f} MB"
+    else:
+        session_str = f"{session_kb} KB"
+    if total_kb >= 1024:
+        total_mb = total_kb / 1024
+        total_str = f"{total_mb:.2f} MB"
+    else:
+        total_str = f"{total_kb} KB"
+    print(f"Scrapping time {time_str} Data Usage : {session_str} Total Data Usage : {total_str}")
+
 def scrape_mal_seasonal(url):
     """Fungsi scraping utama untuk halaman musiman MyAnimeList."""
+    global loading_active, data_usage, session_data_usage
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
     }
-    
-    global loading_active
+
     try:
+        print_status()
         # Mulai animasi loading di thread terpisah
         loading_active = True
         animation_thread = threading.Thread(target=loading_animation, args=("🔄 Mengambil halaman musiman MyAnimeList...",))
@@ -292,9 +319,11 @@ def scrape_mal_seasonal(url):
         animation_thread.start()
 
         time.sleep(random.uniform(3, 7))
-        
-        response = requests.get(url, headers=headers)
+
+        response = requests.get(url, headers=headers, timeout=15)
         response.raise_for_status()
+        data_usage += len(response.content)
+        session_data_usage += len(response.content)
         
         if "captcha" in response.url.lower():
             raise Exception("Diblokir oleh CAPTCHA")
@@ -360,6 +389,7 @@ def scrape_mal_seasonal(url):
         # Hentikan animasi loading
         loading_active = False
         time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
+        animation_thread.join()
 
         logging.info(f"\n🔍 Total entri anime ditemukan: {total_entries}\n")
 
@@ -369,6 +399,7 @@ def scrape_mal_seasonal(url):
         # Hentikan animasi loading
         loading_active = False
         time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
+        animation_thread.join()
 
         logging.error(f"❌ Error scraping: {str(e)}")
         return {}, {}
@@ -376,8 +407,9 @@ def scrape_mal_seasonal(url):
 def save_to_file(anime_data, categories, output_path, member_threshold=10000, nekopoi_data=None, nekopoi_last_update="Unknown", filter_year=2025, season_name="Unknown", year="2025"):
     """Menyimpan data anime ke dalam file."""
     # cspell:disable-next-line
-    header_template = """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
+    header_template = """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
            {year}
+Member : {member}
 
 Latest Information :
 Inget : Anime Hentai yg w ambil ada 2 sumber, yg pastinya syudah jelas mana yg bakal up dluan :v jdi w pisahin list nya biar gk bingung. Ohh iya di list punya ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 jadwalnya cuma 2 bulan
@@ -441,7 +473,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
     fancy_year = ''.join(number_mapping.get(char, char) for char in str(year))
 
     # Ganti placeholder di header
-    header = header_template.replace("{season}", fancy_season).replace("{year}", fancy_year)
+    header = header_template.replace("{season}", fancy_season).replace("{year}", fancy_year).replace("{member}", str(member_threshold))
 
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(header)
@@ -626,48 +658,114 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
                 else:
                     f.write("_*TIDAK ADA*_\n\n")
 
-def main():
-    """Fungsi utama."""
+def tampilkan_header():
+    """Menampilkan header program"""
     logging.info("="*65)
     logging.info("               MyAnimeList dan NekoPoi SCRAPPER")
-    logging.info("                   VERSI 11 - TheKingTermux")
+    logging.info("                   VERSI 12 - TheKingTermux")
     logging.info("="*65)
     logging.info(" Script ini akan mengambil data anime seasonal dari MyAnimeList")
     logging.info(" Normal maupun Hentai dan akan mengambil data anime Hentai dari")
     logging.info("  NekoPoi dan menyimpannya dalam format yang telah ditentukan.\n")
-    
+
+def main():
+    """Fungsi utama."""
+    global start_time, data_usage, session_data_usage
+    start_time = time.time()
+    session_data_usage = 0
+    try:
+        with open('data_usage.txt', 'r') as f:
+            data_usage = int(f.read().strip())
+    except FileNotFoundError:
+        data_usage = 0
+
     # Musim yang tersedia
     seasons = {
         1: "Musim Dingin",
         2: "Semi",
         3: "Panas",
-        4: "Gugur"
+        4: "Gugur",
+        5: "Ganti tahun yang dipilih"
     }
 
-    # Minta input tahun
-    year = input("Masukkan tahun (contoh: 2025): \n")
+    # Minta input tahun dengan validasi
+    while True:
+        tampilkan_header()  # Panggil fungsi header di sini
 
-    # Tampilkan opsi musim
-    print("\nPilih musim:")
-    for key, value in seasons.items():
-        print(f"{key}. {value}")
+        year = input("Masukkan tahun (contoh: 2025): \n").strip()
+        if not year or not year.isdigit():
+            print("⚠️  Warning: Tahun harus berupa angka yang valid dan tidak boleh kosong.\n")
+            for i in range(3, 0, -1):
+                print(f"Silahkan coba lagi dalam {i}...", end='\r')
+                time.sleep(1)
+            print()  # New line after countdown
+            os.system('cls')
+            continue  # Langsung kembali ke awal loop, header akan ditampilkan lagi
+        year_int = int(year)
+        if year_int < 1917:
+            print("⚠️  Warning: Tahun harus 1917 atau lebih baru.")
+            for i in range(3, 0, -1):
+                print(f"Silahkan coba lagi dalam {i}...", end='\r')
+                time.sleep(1)
+            print()  # New line after countdown
+            os.system('cls')
+            continue  # Langsung kembali ke awal loop, header akan ditampilkan lagi
+        current_year = datetime.now().year
+        if year_int > current_year + 1:
+            print("⚠️  Warning: Data MAL gak segitu kedepannya tau bro, lu dari masa depan emang?\n")
+            for i in range(3, 0, -1):
+                print(f"Silahkan coba lagi dalam {i}...", end='\r')
+                time.sleep(1)
+            print()  # New line after countdown
+            os.system('cls')
+            continue  # Langsung kembali ke awal loop, header akan ditampilkan lagi
 
-    # Minta input musim
-    season_choice = input("Silakan pilih musim (1-4): \n")
+        # Minta input musim dengan validasi
+        season_valid = False
+        while True:
+            print(f"\nTahun yang dipilih: {year}")
+            print("\nPilih musim:")
+            for key, value in seasons.items():
+                print(f"{key}. {value}")
 
-    # Validasi input pengguna
-    while not season_choice.isdigit() or int(season_choice) not in seasons:
-        print("Input tidak valid. Silakan pilih musim yang valid (1-4).")
-        season_choice = input("Silakan pilih musim (1-4): \n")
+            season_choice = input("Silakan pilih musim (1-5): \n")
+            if season_choice == '5':
+                print("⚠️  Warning: Kembali ke tahun\n")
+                for i in range(3, 0, -1):
+                    print(f"Kembali ke pemilihan tahun dalam {i}...", end='\r')
+                    time.sleep(1)
+                print()
+                year = None  # Reset year to reselect
+                os.system('cls')
+                break
+            elif season_choice.isdigit() and int(season_choice) in [1,2,3,4]:
+                season_valid = True
+                break
+            print("⚠️  Warning: Input tidak valid. Silakan memilih pilihan yang valid (1-5).\n")
+            for i in range(3, 0, -1):
+                print(f"Silahkan coba lagi dalam {i}...", end='\r')
+                time.sleep(1)
+            print()
+            os.system('cls')
+            tampilkan_header()
+            # Lanjut ke awal loop, akan tampilkan tahun dan opsi musim lagi
 
-    custom_name = input("\nMasukkan nama file output (kosongkan untuk default 'AnimeList.txt'): \n").strip()
+        if season_valid:
+            break
 
     # Minta ambang batas anggota
-    member_threshold_input = input("\nMasukkan ambang batas anggota (default 10000): \n").strip()
+    member_threshold_input = input("\nMasukkan ambang batas anggota (kosongkan untuk default 10000 atau 10K, contoh: 5 untuk 5000): \n").strip()
     if not member_threshold_input:
         member_threshold = 10000
     else:
-        member_threshold = int(member_threshold_input)
+        member_threshold_input = member_threshold_input.upper().replace(',', '').strip()
+        if 'K' in member_threshold_input:
+            member_threshold = int(float(member_threshold_input.replace('K', '')) * 1000)
+        elif 'M' in member_threshold_input:
+            member_threshold = int(float(member_threshold_input.replace('M', '')) * 1000000)
+        else:
+            # Assume K if no suffix
+            member_threshold = int(float(member_threshold_input) * 1000)
 
     # Dapatkan musim yang dipilih
     selected_season = seasons[int(season_choice)]
@@ -681,6 +779,15 @@ def main():
     }
     url_season = season_url_map.get(selected_season, selected_season)
 
+    # Hitung nama default
+    selected_season_english = season_url_map.get(selected_season, selected_season).capitalize()
+    default_name = f"{selected_season_english}{year}.txt"
+    if member_threshold != 10000:
+        threshold_str = f"{member_threshold // 1000}K" if member_threshold % 1000 == 0 else str(member_threshold)
+        default_name = default_name.replace('.txt', f'Member{threshold_str}.txt')
+
+    custom_name = input(f"\nMasukkan nama file output (kosongkan untuk default '{default_name}'): \n").strip()
+
     # Konstruksi URL berdasarkan input pengguna
     url = f"https://myanimelist.net/anime/season/{year}/{url_season}"
 
@@ -692,7 +799,11 @@ def main():
 
     # Simpan ke file
     if not custom_name:
-        custom_name = "AnimeList.txt"
+        selected_season_english = season_url_map.get(selected_season, selected_season).capitalize()
+        custom_name = f"{selected_season_english}{year}.txt"
+        if member_threshold != 10000:
+            threshold_str = f"{member_threshold // 1000}K" if member_threshold % 1000 == 0 else str(member_threshold)
+            custom_name = custom_name.replace('.txt', f'Member{threshold_str}.txt')
     else:
         if not custom_name.lower().endswith(".txt"):
             custom_name += ".txt"
@@ -741,6 +852,10 @@ def main():
 
         logging.error("Saran: Periksa koneksi internet Anda dan coba lagi nanti.")
     logging.info("="*50)
+    print_status()
+    with open('data_usage.txt', 'w') as f:
+        f.write(str(data_usage))
 
 if __name__ == "__main__":
     main()
+    
