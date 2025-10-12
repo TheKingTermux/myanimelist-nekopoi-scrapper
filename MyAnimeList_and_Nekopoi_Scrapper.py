@@ -407,7 +407,7 @@ def scrape_mal_seasonal(url):
 def save_to_file(anime_data, categories, output_path, member_threshold=10000, nekopoi_data=None, nekopoi_last_update="Unknown", filter_year=2025, season_name="Unknown", year="2025"):
     """Menyimpan data anime ke dalam file."""
     # cspell:disable-next-line
-    header_template = """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
+    header_template = """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
            {year}
 Member : {member}
 
@@ -859,3 +859,4 @@ def main():
 if __name__ == "__main__":
     main()
     
+
