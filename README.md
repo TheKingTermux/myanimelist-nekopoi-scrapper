@@ -1,4 +1,4 @@
-👉 **[English Version](./README.en.md)**  👉 **[Bingung masalah keamanan dan kurang percaya dengan Skrip ini? Silahkan baca disini untuk info lebih lanjut](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/issues/9)** 
+👉 **[English Version](./README.en.md)**  👉 **[Bingung masalah keamanan dan kurang percaya dengan Skrip ini? Silahkan baca disini untuk info lebih lanjut](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/wiki/Masalah-Keamanan%3F-Silakan-baca-ini!)** 
 
 # 🎬 MyAnimeList & Nekopoi Scrapper
 
