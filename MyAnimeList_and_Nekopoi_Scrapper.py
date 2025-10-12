@@ -134,7 +134,7 @@ def get_anime_data(entry):
             'genres': genres,
             'themes': themes,
             'demographics': demographics,
-            'category': None  # Initialize without a category
+            'category': None  # Inisialisasi tanpa kategori
         }
     
     except Exception as e:
@@ -698,7 +698,7 @@ def main():
             for i in range(3, 0, -1):
                 print(f"Silahkan coba lagi dalam {i}...", end='\r')
                 time.sleep(1)
-            print()  # New line after countdown
+            print()  # Baris baru setelah hitungan mundur
             os.system('cls')
             continue  # Langsung kembali ke awal loop, header akan ditampilkan lagi
         year_int = int(year)
@@ -707,7 +707,7 @@ def main():
             for i in range(3, 0, -1):
                 print(f"Silahkan coba lagi dalam {i}...", end='\r')
                 time.sleep(1)
-            print()  # New line after countdown
+            print()  # Baris baru setelah hitungan mundur
             os.system('cls')
             continue  # Langsung kembali ke awal loop, header akan ditampilkan lagi
         current_year = datetime.now().year
@@ -716,7 +716,7 @@ def main():
             for i in range(3, 0, -1):
                 print(f"Silahkan coba lagi dalam {i}...", end='\r')
                 time.sleep(1)
-            print()  # New line after countdown
+            print()  # Baris baru setelah hitungan mundur
             os.system('cls')
             continue  # Langsung kembali ke awal loop, header akan ditampilkan lagi
 
@@ -735,7 +735,7 @@ def main():
                     print(f"Kembali ke pemilihan tahun dalam {i}...", end='\r')
                     time.sleep(1)
                 print()
-                year = None  # Reset year to reselect
+                year = None  # Atur ulang tahun untuk memilih ulang
                 os.system('cls')
                 break
             elif season_choice.isdigit() and int(season_choice) in [1,2,3,4]:
@@ -764,7 +764,7 @@ def main():
         elif 'M' in member_threshold_input:
             member_threshold = int(float(member_threshold_input.replace('M', '')) * 1000000)
         else:
-            # Assume K if no suffix
+            # Asumsikan K jika tidak ada sufiks
             member_threshold = int(float(member_threshold_input) * 1000)
 
     # Dapatkan musim yang dipilih
@@ -858,3 +858,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
