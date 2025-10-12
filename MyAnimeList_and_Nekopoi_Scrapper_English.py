@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 loading_active = False
 
 def loading_animation(message="🔄 Processing..."):
-    """Displays a loading animation with spinner on its own line"""
+    """Display loading animation with spinner on its own line"""
     spinner = ['|', '/', '-', '\\']
     i = 0
     while loading_active:
@@ -54,7 +54,7 @@ def translate_month(date_str):
     return date_str
 
 def parse_date_flexible(date_str):
-    """Parses date string with flexible format."""
+    """Parse date string with flexible format."""
     if date_str == 'Unknown':
         return None
     try:
@@ -69,7 +69,7 @@ def parse_date_flexible(date_str):
             return None
 
 def parse_member_count(members_text):
-    """Converts member count text (like '10K') to integer."""
+    """Convert member count text (like '10K') to integer."""
     members_text = members_text.upper().replace(',', '').strip()
     if 'K' in members_text:
         return int(float(members_text.replace('K', '')) * 1000)
@@ -79,7 +79,7 @@ def parse_member_count(members_text):
         return int(re.sub(r'[^0-9]', '', members_text))
 
 def get_anime_data(entry):
-    """Extracts data from one anime entry."""
+    """Extract data from one anime entry."""
     try:
         # Anime title
         title_tag = entry.select_one('div.title > div > h2 > a')
@@ -142,14 +142,15 @@ def get_anime_data(entry):
         return None
 
 def scrape_nekopoi():
-    """Scrapes hentai schedule from Nekopoi.care"""
+    """Fetch hentai schedule from Nekopoi.care"""
+    global loading_active, data_usage, session_data_usage
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
     }
 
-    global loading_active
     try:
+        print_status()
         # Start loading animation in separate thread
         loading_active = True
         animation_thread = threading.Thread(target=loading_animation, args=("🔄 Fetching Nekopoi hentai schedule...",))
@@ -158,8 +159,10 @@ def scrape_nekopoi():
 
         time.sleep(random.uniform(3, 7))
 
-        response = requests.get("https://nekopoi.care/jadwal-new-hentai/", headers=headers)
+        response = requests.get("https://nekopoi.care/jadwal-new-hentai/", headers=headers, timeout=15)
         response.raise_for_status()
+        data_usage += len(response.content)
+        session_data_usage += len(response.content)
 
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -264,6 +267,7 @@ def scrape_nekopoi():
         # Stop loading animation
         loading_active = False
         time.sleep(0.2)  # Give time for animation thread to finish
+        animation_thread.join()
 
         logging.info(f"\n🔍 Found Nekopoi entries for {len(processed_data)} dates")
         return processed_data, last_update
@@ -272,19 +276,42 @@ def scrape_nekopoi():
         # Stop loading animation
         loading_active = False
         time.sleep(0.2)  # Give time for animation thread to finish
+        animation_thread.join()
 
         logging.error(f"❌ Error scraping Nekopoi: {str(e)}")
         return {}, "Unknown"
 
+def print_status():
+    """Print scrapping time, data usage, and current time."""
+    global start_time, data_usage, session_data_usage
+    elapsed = time.time() - start_time
+    minutes = int(elapsed // 60)
+    seconds = int(elapsed % 60)
+    time_str = f"{minutes:02d}:{seconds:02d}"
+    session_kb = session_data_usage // 1024
+    total_kb = data_usage // 1024
+    if session_kb >= 1024:
+        session_mb = session_kb / 1024
+        session_str = f"{session_mb:.2f} MB"
+    else:
+        session_str = f"{session_kb} KB"
+    if total_kb >= 1024:
+        total_mb = total_kb / 1024
+        total_str = f"{total_mb:.2f} MB"
+    else:
+        total_str = f"{total_kb} KB"
+    print(f"Scrapping time {time_str} Data Usage : {session_str} Total Data Usage : {total_str}")
+
 def scrape_mal_seasonal(url):
     """Main scraping function for MyAnimeList seasonal page."""
+    global loading_active, data_usage, session_data_usage
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
     }
 
-    global loading_active
     try:
+        print_status()
         # Start loading animation in separate thread
         loading_active = True
         animation_thread = threading.Thread(target=loading_animation, args=("🔄 Fetching MyAnimeList seasonal page...",))
@@ -293,8 +320,10 @@ def scrape_mal_seasonal(url):
 
         time.sleep(random.uniform(3, 7))
 
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=15)
         response.raise_for_status()
+        data_usage += len(response.content)
+        session_data_usage += len(response.content)
 
         if "captcha" in response.url.lower():
             raise Exception("Blocked by CAPTCHA")
@@ -360,6 +389,7 @@ def scrape_mal_seasonal(url):
         # Stop loading animation
         loading_active = False
         time.sleep(0.2)  # Give time for animation thread to finish
+        animation_thread.join()
 
         logging.info(f"\n🔍 Total anime entries found: {total_entries}\n")
 
@@ -369,61 +399,62 @@ def scrape_mal_seasonal(url):
         # Stop loading animation
         loading_active = False
         time.sleep(0.2)  # Give time for animation thread to finish
+        animation_thread.join()
 
         logging.error(f"❌ Error scraping: {str(e)}")
         return {}, {}
 
 def save_to_file(anime_data, categories, output_path, member_threshold=10000, nekopoi_data=None, nekopoi_last_update="Unknown", filter_year=2025, season_name="Unknown", year="2025"):
-    """Saves anime data to file."""
+    """Save anime data to file."""
     # cspell:disable-next-line
-    header_template = """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
+    header_template = """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
             {year}
+ Member : {member}
 
-Latest Information :
-Remember : The hentai anime we take has 2 sources, which clearly show which will be released first :v so we separate the lists so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 list is only 2 months
+ Latest Information :
+ Note : The hentai anime I take comes from 2 sources, which clearly show which one will be released first :v so I separate the list so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 list is only 2 months
 
-Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
-- Release Date
-> Hentai Title
-^ Studio
-! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
-+ Number of Episodes (if available)
-~ Minutes per Episode (if available)
+ Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
+ - Release Date
+ > Hentai Title
+ ^ Studio
+ ! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
+ + Number of Episodes (if available)
+ ~ Minutes per Episode (if available)
 
-Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 Anime list :
-- Release Date
-> Hentai Title
-^ Studio
-! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
-+ Episodes to be released (Meaning which eps will be released on this date in ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒)
+ Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 Anime list :
+ - Release Date
+ > Hentai Title
+ ^ Studio
+ ! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
+ + Episodes to be released (Meaning which episode will be released on this date in ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒)
 
-Common Information for Normal Anime list :
-- Release Date
-> Anime Title
-! Anime Genre
-+ Number of Episodes (if available)
-~ Minutes per Episode (if available)
+ Common Information for Normal Anime list :
+ - Release Date
+ > Anime Title
+ ! Anime Genre
+ + Number of Episodes (if available)
+ ~ Minutes per Episode (if available)
 
-Danger Anime Genre:
-Adl : Adult
-BL / Yao : Boys Love / Yaoi
-Cro : Crossdressing
-Ecc : Ecchi
-Ero : Erotica
-GL / Yur : Girls Love / Yuri
-Hen : Hentai
+ Danger Anime Genre:
+ Adl : Adult
+ BL / Yao : Boys Love / Yaoi
+ Cro : Crossdressing
+ Ecc : Ecchi
+ Ero : Erotica
+ GL / Yur : Girls Love / Yuri
+ Hen : Hentai
 
-Additional Info :
-If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read and understand well" so if something happens it's not the Admin's fault / the one who shares the recommendation if you still watch that anime with dangerous genre 🙂
+ Additional Info :
+ If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read first and understand well" so that if there is something wrong it's not the fault of the Admin / recommender if you still watch that dangerous genre anime 🙂
 
+ Disclaimer :
+ All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears I write :v
+ Basically I take what I think is interesting :v
 
-Disclaimer :
-All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears we write :v
-Basically we take what we think is interesting :v
-
-Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
-Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
-\n\n"""
+ Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
+ \n\n"""
 
     # Convert season name to fancy font
     season_mapping = {
@@ -442,7 +473,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
     fancy_year = ''.join(number_mapping.get(char, char) for char in str(year))
 
     # Replace placeholders in header
-    header = header_template.replace("{season}", fancy_season).replace("{year}", fancy_year)
+    header = header_template.replace("{season}", fancy_season).replace("{year}", fancy_year).replace("{member}", str(member_threshold))
 
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(header)
@@ -454,11 +485,11 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
             f.write("=" * 50 + "\n")
 
             # Sort dates chronologically
-            def parse_english_date(date_str):
-                """Parses English date format like '27 June 2025' to datetime for sorting"""
+            def parse_indo_date(date_str):
+                """Parse Indonesian date format like '27 Juni 2025' to datetime for sorting"""
                 month_map = {
-                    'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
-                    'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
+                    'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
+                    'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
                 }
                 parts = date_str.split()
                 if len(parts) == 3:
@@ -468,7 +499,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
                     return datetime(year, month, day)
                 return datetime.now()  # fallback
 
-            sorted_dates = sorted(nekopoi_data.keys(), key=parse_english_date)
+            sorted_dates = sorted(nekopoi_data.keys(), key=parse_indo_date)
 
             for date in sorted_dates:
                 entries = nekopoi_data[date]
@@ -569,7 +600,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
                         f.write(f"~ {anime['duration']} min / ep\n")
                     f.write("\n")
 
-            # Write Erotica Anime
+            # Write Erotica Anime List
             if erotica_anime_list:
                 f.write("\n" + "=" * 50 + "\n")
                 f.write("*𝙴𝚛𝚘𝚝𝚒𝚌𝚊 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝 ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞*\n")
@@ -585,7 +616,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
                         f.write(f"~ {anime['duration']} min / ep\n")
                     f.write("\n")
 
-            # Write Normal Anime separated by category
+            # Write Normal Anime List separated by category
             category_order = ['TV (New)', 'TV (Continuing)', 'ONA', 'OVA', 'Movie', 'Special', 'Unknown']
             f.write("\n" + "=" * 50 + "\n")
             f.write("*𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝*\n")
@@ -600,14 +631,14 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
                         date_str = anime['original_date']
                         try:
                             dt = datetime.strptime(date_str, '%b %d, %Y')
-                            group = f"{dt.day} {dt.strftime('%B')} {dt.year}"
+                            group = f"{dt.day} {translate_month(dt.strftime('%B'))} {dt.year}"
                         except ValueError:
                             try:
                                 dt = datetime.strptime(date_str, '%b %Y')
-                                group = f"Unknown Release Date {dt.strftime('%B')} {dt.year}"
+                                group = f"Unknown Release Date {translate_month(dt.strftime('%B'))} {dt.year}"
                             except ValueError:
                                 dt = datetime.min
-                                group = date_str
+                                group = translate_month(date_str)
                         if group not in [g[0] for g in groups]:
                             groups.append((group, dt))
                         group_dict[group].append(anime)
@@ -627,48 +658,114 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
                 else:
                     f.write("_*NONE*_\n\n")
 
-def main():
-    """Main function."""
+def tampilkan_header():
+    """Display program header"""
     logging.info("="*65)
     logging.info("               MyAnimeList and NekoPoi SCRAPPER")
-    logging.info("                   VERSION 11 - TheKingTermux")
+    logging.info("                   VERSION 12 - TheKingTermux")
     logging.info("="*65)
-    logging.info(" This script will scrape seasonal anime data from MyAnimeList")
-    logging.info("  Normal and Hentai and will scrape Hentai anime data from")
-    logging.info("       NekoPoi and save it in the specified format.\n")
+    logging.info(" This script will fetch seasonal anime data from MyAnimeList")
+    logging.info(" Normal and Hentai and will fetch Hentai anime data from")
+    logging.info("  NekoPoi and save it in the specified format.\n")
+
+def main():
+    """Main function."""
+    global start_time, data_usage, session_data_usage
+    start_time = time.time()
+    session_data_usage = 0
+    try:
+        with open('data_usage.txt', 'r') as f:
+            data_usage = int(f.read().strip())
+    except FileNotFoundError:
+        data_usage = 0
 
     # Available seasons
     seasons = {
         1: "Winter",
         2: "Spring",
         3: "Summer",
-        4: "Fall"
+        4: "Fall",
+        5: "Change selected year"
     }
 
-    # Ask for year input
-    year = input("Enter year (example: 2025): \n")
+    # Request year input with validation
+    while True:
+        tampilkan_header()  # Call header function here
 
-    # Display season options
-    print("\nChoose season:")
-    for key, value in seasons.items():
-        print(f"{key}. {value}")
+        year = input("Enter year (example: 2025): \n").strip()
+        if not year or not year.isdigit():
+            print("⚠️  Warning: Year must be a valid number and not empty.\n")
+            for i in range(3, 0, -1):
+                print(f"Please try again in {i}...", end='\r')
+                time.sleep(1)
+            print()  # New line after countdown
+            os.system('cls')
+            continue  # Go back to beginning of loop, header will be displayed again
+        year_int = int(year)
+        if year_int < 1917:
+            print("⚠️  Warning: Year must be 1917 or newer.")
+            for i in range(3, 0, -1):
+                print(f"Please try again in {i}...", end='\r')
+                time.sleep(1)
+            print()  # New line after countdown
+            os.system('cls')
+            continue  # Go back to beginning of loop, header will be displayed again
+        current_year = datetime.now().year
+        if year_int > current_year + 1:
+            print("⚠️  Warning: MAL data doesn't go that far ahead, are you from the future?\n")
+            for i in range(3, 0, -1):
+                print(f"Please try again in {i}...", end='\r')
+                time.sleep(1)
+            print()  # New line after countdown
+            os.system('cls')
+            continue  # Go back to beginning of loop, header will be displayed again
 
-    # Ask for season input
-    season_choice = input("Please choose season (1-4): \n")
+        # Request season input with validation
+        season_valid = False
+        while True:
+            print(f"\nSelected year: {year}")
+            print("\nSelect season:")
+            for key, value in seasons.items():
+                print(f"{key}. {value}")
 
-    # Validate user input
-    while not season_choice.isdigit() or int(season_choice) not in seasons:
-        print("Invalid input. Please choose a valid season (1-4).")
-        season_choice = input("Please choose season (1-4): \n")
+            season_choice = input("Please select season (1-5): \n")
+            if season_choice == '5':
+                print("⚠️  Warning: Going back to year selection\n")
+                for i in range(3, 0, -1):
+                    print(f"Going back to year selection in {i}...", end='\r')
+                    time.sleep(1)
+                print()
+                year = None  # Reset year to reselect
+                os.system('cls')
+                break
+            elif season_choice.isdigit() and int(season_choice) in [1,2,3,4]:
+                season_valid = True
+                break
+            print("⚠️  Warning: Invalid input. Please select a valid option (1-5).\n")
+            for i in range(3, 0, -1):
+                print(f"Please try again in {i}...", end='\r')
+                time.sleep(1)
+            print()
+            os.system('cls')
+            tampilkan_header()
+            # Continue to beginning of loop, will display year and season options again
 
-    custom_name = input("\nEnter output file name (leave blank for default 'AnimeList.txt'): \n").strip()
+        if season_valid:
+            break
 
-    # Ask for member threshold
-    member_threshold_input = input("\nEnter member threshold (default 10000): \n").strip()
+    # Request member threshold
+    member_threshold_input = input("\nEnter member threshold (leave empty for default 10000 or 10K, example: 5 for 5000): \n").strip()
     if not member_threshold_input:
         member_threshold = 10000
     else:
-        member_threshold = int(member_threshold_input)
+        member_threshold_input = member_threshold_input.upper().replace(',', '').strip()
+        if 'K' in member_threshold_input:
+            member_threshold = int(float(member_threshold_input.replace('K', '')) * 1000)
+        elif 'M' in member_threshold_input:
+            member_threshold = int(float(member_threshold_input.replace('M', '')) * 1000000)
+        else:
+            # Assume K if no suffix
+            member_threshold = int(float(member_threshold_input) * 1000)
 
     # Get selected season
     selected_season = seasons[int(season_choice)]
@@ -682,6 +779,15 @@ def main():
     }
     url_season = season_url_map.get(selected_season, selected_season)
 
+    # Calculate default name
+    selected_season_english = season_url_map.get(selected_season, selected_season).capitalize()
+    default_name = f"{selected_season_english}{year}.txt"
+    if member_threshold != 10000:
+        threshold_str = f"{member_threshold // 1000}K" if member_threshold % 1000 == 0 else str(member_threshold)
+        default_name = default_name.replace('.txt', f'Member{threshold_str}.txt')
+
+    custom_name = input(f"\nEnter output file name (leave empty for default '{default_name}'): \n").strip()
+
     # Construct URL based on user input
     url = f"https://myanimelist.net/anime/season/{year}/{url_season}"
 
@@ -693,7 +799,11 @@ def main():
 
     # Save to file
     if not custom_name:
-        custom_name = "AnimeList.txt"
+        selected_season_english = season_url_map.get(selected_season, selected_season).capitalize()
+        custom_name = f"{selected_season_english}{year}.txt"
+        if member_threshold != 10000:
+            threshold_str = f"{member_threshold // 1000}K" if member_threshold % 1000 == 0 else str(member_threshold)
+            custom_name = custom_name.replace('.txt', f'Member{threshold_str}.txt')
     else:
         if not custom_name.lower().endswith(".txt"):
             custom_name += ".txt"
@@ -718,7 +828,7 @@ def main():
     else:
         logging.error("❌ Failed to collect anime data from both sources")
 
-        # Possible reasons for MyAnimeList error
+        # MyAnimeList error reasons
         logging.error("Possible reasons for MyAnimeList:")
         mal_reasons = [
             "MyAnimeList site is down",
@@ -729,7 +839,7 @@ def main():
         for reason in mal_reasons:
             logging.error(f"- {reason}")
 
-        # Possible reasons for Nekopoi error
+        # Nekopoi error reasons
         logging.error("Possible reasons for Nekopoi:")
         nekopoi_reasons = [
             "Nekopoi site is down",
@@ -742,6 +852,10 @@ def main():
 
         logging.error("Suggestion: Check your internet connection and try again later.")
     logging.info("="*50)
+    print_status()
+    with open('data_usage.txt', 'w') as f:
+        f.write(str(data_usage))
 
 if __name__ == "__main__":
     main()
+    
