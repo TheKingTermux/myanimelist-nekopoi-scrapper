@@ -485,11 +485,11 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
             f.write("=" * 50 + "\n")
 
             # Sort dates chronologically
-            def parse_indo_date(date_str):
-                """Parse Indonesian date format like '27 Juni 2025' to datetime for sorting"""
+            def parse_english_date(date_str):
+                """Parses English date format like '27 June 2025' to datetime for sorting"""
                 month_map = {
-                    'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
-                    'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
+                    'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
+                    'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
                 }
                 parts = date_str.split()
                 if len(parts) == 3:
@@ -499,7 +499,7 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
                     return datetime(year, month, day)
                 return datetime.now()  # fallback
 
-            sorted_dates = sorted(nekopoi_data.keys(), key=parse_indo_date)
+            sorted_dates = sorted(nekopoi_data.keys(), key=parse_english_date)
 
             for date in sorted_dates:
                 entries = nekopoi_data[date]
@@ -662,11 +662,11 @@ def tampilkan_header():
     """Display program header"""
     logging.info("="*65)
     logging.info("               MyAnimeList and NekoPoi SCRAPPER")
-    logging.info("                   VERSION 12 - TheKingTermux")
+    logging.info("                  VERSION 12 - TheKingTermux")
     logging.info("="*65)
     logging.info(" This script will fetch seasonal anime data from MyAnimeList")
-    logging.info(" Normal and Hentai and will fetch Hentai anime data from")
-    logging.info("  NekoPoi and save it in the specified format.\n")
+    logging.info("   Normal and Hentai and will fetch Hentai anime data from")
+    logging.info("        NekoPoi and save it in the specified format.\n")
 
 def main():
     """Main function."""
@@ -858,5 +858,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-
