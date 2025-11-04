@@ -1,0 +1,44 @@
+name: ❌ Remove Feature Request
+description: Request to remove or deprecate an existing feature
+labels: [feature removal, maintenance]
+
+body:
+  - type: textarea
+    id: feature-name
+    attributes:
+      label: Feature Name
+      description: Which feature should be removed or deprecated?
+      placeholder: |
+        Example:
+          Deprecated API endpoint `/v1/user/info`
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason for Removal
+      description: Why should this feature be removed or deprecated?
+      placeholder: |
+        Example:
+          The endpoint is replaced by a more efficient `/v2/user/profile` route.
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential Impact
+      description: Describe any impact this removal might have (breaking changes, etc.).
+      placeholder: |
+        Example:
+          Existing integrations might fail unless updated to the new endpoint.
+
+  - type: textarea
+    id: replacement
+    attributes:
+      label: Replacement or Migration Path
+      description: Suggest an alternative or migration guide.
+      placeholder: |
+        Example:
+          Users should switch to `/v2/user/profile` for future compatibility.
