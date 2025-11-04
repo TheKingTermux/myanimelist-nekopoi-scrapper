@@ -1,0 +1,50 @@
+name: 🧩 Improve Code / Refactor Request
+description: Suggest improvements or refactors for existing code
+labels: [refactor, improvement]
+
+body:
+  - type: textarea
+    id: area
+    attributes:
+      label: Area of Code
+      description: Which part of the code or file needs improvement?
+      placeholder: |
+        Example:
+          `src/components/Header.js`
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-issue
+    attributes:
+      label: Current Issue
+      description: Explain what’s wrong or inefficient in the current implementation.
+      placeholder: |
+        Example:
+          The component re-renders unnecessarily due to state mismanagement.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Proposed Improvement
+      description: Suggest a better approach or refactor idea.
+      placeholder: |
+        Example:
+          Use `React.memo()` and move constant values outside the component.
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Benefits
+      description: Explain the expected benefit from this improvement.
+      placeholder: |
+        Example:
+          Reduced re-renders → better performance and cleaner code.
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Include benchmarks, PR references, or related issues.
