@@ -1,0 +1,41 @@
+name: ✨ New Feature Request
+description: Request a new feature or functionality to be added
+labels: [new feature, enhancement]
+
+body:
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Description
+      description: Describe the feature you’d like to see implemented.
+      placeholder: |
+        Example:
+          Add support for dark mode on the dashboard.
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Explain why this feature is needed and how it improves the project.
+      placeholder: |
+        Example:
+          Many users prefer a dark interface to reduce eye strain during night time.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: If applicable, mention alternative solutions or workarounds.
+      placeholder: |
+        Example:
+          Users can currently use browser extensions to invert colors.
+  
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Add any extra context, references, or screenshots.
