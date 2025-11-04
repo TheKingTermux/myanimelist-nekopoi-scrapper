@@ -1,6 +1,7 @@
 name: 🐞 Bug Report
 description: Report a bug or issue in the codebase
 labels: [bug, needs investigation]
+assignees: [TheKingTermux]
 
 body:
   - type: textarea
