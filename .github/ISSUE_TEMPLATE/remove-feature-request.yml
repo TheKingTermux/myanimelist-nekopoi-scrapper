@@ -1,6 +1,7 @@
 name: ❌ Remove Feature Request
 description: Request to remove or deprecate an existing feature
 labels: [feature removal, maintenance]
+assignees: [TheKingTermux]
 
 body:
   - type: textarea
