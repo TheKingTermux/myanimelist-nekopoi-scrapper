@@ -74,7 +74,7 @@ python gui_scraper.py
 **Fitur GUI:**
 - Dukungan 9 bahasa (Indonesia, English, Japanese, Spanish, Chinese, Korean, French, German, Portuguese)
 - Form input untuk tahun, musim, threshold member
-- **Opsi Scraping Terpisah**: Checkbox untuk memilih MAL saja, Nekopoi saja, atau keduanya
+- Opsi Scraping Terpisah: Checkbox untuk memilih MAL saja, Nekopoi saja, atau keduanya
 - Pilihan format export (TXT/JSON/CSV/PDF)
 - Tombol scrape dengan progress bar
 - Preview hasil scraping
@@ -117,10 +117,6 @@ Kontribusi welcome! Silakan:
 3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push ke branch (`git push origin feature/AmazingFeature`)
 5. Buat Pull Request
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
 
 ## ‍💻 Author
 
