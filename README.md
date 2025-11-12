@@ -121,13 +121,13 @@ Kontribusi welcome! Silakan:
 4. Push ke branch
 5. Buat Pull Request
 
-## ‍💻 Author
-
-Created with ❤️ by TheKingTermux-Sama
-
 ## 🙏 Acknowledgments
 
 - MyAnimeList.net untuk data anime
 - Nekopoi.care untuk jadwal hentai
 - BeautifulSoup4 dan Requests untuk web scraping
 - Komunitas open source
+
+## ‍💻 Author
+
+Created with ❤️ by TheKingTermux-Sama
