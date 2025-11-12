@@ -6,24 +6,37 @@
 ![GitHub Release](https://img.shields.io/github/v/release/TheKingTermux/myanimelist-nekopoi-scrapper)
 [![Made with ❤️](https://img.shields.io/badge/Dibuat%20dengan-%E2%9D%A4-red)]()
 
-> Automatic scraper to collect data from MyAnimeList & Nekopoi, created with Python + Requests + BeautifulSoup.  
-> Packaged with a `.bat` installer so anyone can run it easily 🚀
+> Automated scraper to collect data from MyAnimeList & Nekopoi, built in Python + Requests + BeautifulSoup.
+>
+> Wrapped in a `.bat` installer so it's easy for anyone to run 🚀
+>
+> Use `gui_scraper.py` for more features!.
 
 ## ✨ Features
-- 🔍 Scrape seasonal anime data (Normal, Erotica, Hentai) from **MyAnimeList**  
-- 🔞 Scrape hentai metadata from **NekoPoi**  
-- ⚡ Auto setup: If Python is not installed, the script will automatically download, install, and then delete the downloaded Python installation files  
-- 📦 Auto install all required libraries (`requirements.txt`)  
-- 🔁 Interactive menu to run the scraper or install requirements  
+- 🔍 Fetch seasonal anime data (Normal, Erotica, Hentai) from **MyAnimeList**
+- 🔞 Fetch hentai metadata from **NekoPoi**
+- 🖥️ Desktop Interface: Graphical interface with Tkinter for ease of use
+- 🌍 Multi-Language GUI Support: Supports 9 languages ​​(Indonesian, English, Japanese, Spanish, Mandarin, Korean, French, German, Portuguese)
+- 🔍 Search & Filter: Search by title, genre, studio, number of members
+- 📊 Multi-Format Export: Save results in TXT, JSON, CSV, or PDF formats
+- 🔄 Retry & Proxy Support: Error handling with auto-retries and proxy support
+- ⚡ Auto-setup: If Python is not installed, the script will download, install, and then automatically uninstall the downloaded Python installation file
+- 📦 Auto-install all required libraries (`requirements.txt`)
+- 🔁 Interactive menu to run the scraper or install requirements
 
 ## 📂 Project Structure
 ```
-├── LICENSE                                     # License
-├── MyAnimeList_and_Nekopoi_Scrapper.py         # Main script (English version)
+├── LICENSE # License
+├── MyAnimeList_and_Nekopoi_Scrapper.py # Main script (Indonesian version)
 ├── MyAnimeList_and_Nekopoi_Scrapper_English.py # Main script (English version)
-├── requirements.txt                            # Dependencies
-├── Start.bat                                   # Batch file (installer + runner)
-└── README.md and README.en.md                  # Project documentation
+├── gui_scraper.py # Desktop GUI with Tkinter (multi-language support)
+├── localization.py # Code for multi-language support
+├── requirements.txt # Dependencies
+├── Start.bat # Batch file (installer + runner)
+├── AnimeList/ # Output folder Scraping
+├── data_usage.txt # Data usage tracking
+├── README.md and README.en.md # Project documentation
+└── CHANGELOG.md # Version changelog
 ```
 
 ## 🛠️ How to Use
@@ -44,22 +57,75 @@ Simply double-click `Start.bat` and the tools will run automatically.
 
 1 → Run Scraper
 
-> If Python is not installed, it will be installed automatically + install requirements → then the scraper will run.
+> If Python is not already installed, it will be automatically installed and installed the requirements → then the scraper will run.
 
-2 → Install Requirements manually
+2 → Run Desktop GUI
 
-3 → Exit
+> Graphical interface for ease of use without the command line
+
+3 → Install Requirements Manually
+
+4 → Exit
+
+## 🎨 Using Desktop GUI
+
+```bash
+python gui_scraper.py
+```
+
+### GUI Features:
+- Support for 9 languages ​​(Indonesian, English, Japanese, Spanish, (Chinese, Korean, French, German, Portuguese)
+- Input form for year, season, member threshold
+- Separate Scraping Options: Checkbox to select MAL only, Nekopoi only, or both
+- Export format options (TXT/JSON/CSV/PDF)
+- Scrape button with progress bar
+- Preview scraping results
+- Real-time search and filtering
+- Save results to a file
 
 ## 📦 Requirements
 
-Windows 10/11 (supports .bat)
+### System
+- Windows 10/11 (supports .bat)
+- Linux/MacOS (manual setup)
+- Internet (to install Python/libraries)
 
-Internet (for installing Python/libraries)
+### Software
+- Python 3.8+ (auto-install if not already installed)
+- Dependencies: `pip install -r requirements.txt` (use Start.bat for easier access)
 
-Python (automatically installed if not already present)
+### Hardware
+- RAM: Minimum 2GB
+- Storage: 500MB free space
+- CPU: Dual-core 2.0GHz+
+
+## 📋 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version change details.
+
+## ⚠️ Disclaimer
+
+- This script is for educational and personal use only.
+- Scraping may violate the target site's Terms of Service.
+- Use wisely and responsibly.
+- Rate limiting and proxy support are provided to avoid blocking.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+1. [Fork repository](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/fork)
+2. Create a new feature branch.
+3. Commit changes.
+4. Push to branch.
+5. Create a Pull Request.
+
+## 🙏 Acknowledgments
+
+- MyAnimeList.net for anime data
+- Nekopoi.care for hentai schedules
+- BeautifulSoup4 and Requests for web scraping
+- Open source community
 
 ## 👨‍💻 Author
 
 Created with ❤️ by TheKingTermux-Sama
-
-Translated with DeepL.com (free version)
