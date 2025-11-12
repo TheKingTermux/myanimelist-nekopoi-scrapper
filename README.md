@@ -112,10 +112,10 @@ Lihat [CHANGELOG.md](./CHANGELOG.md) untuk detail perubahan versi.
 ## 🤝 Contributing
 
 Kontribusi welcome! Silakan:
-1. Fork repository
-2. Buat branch fitur baru (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
+1. [Fork repository](https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper/fork)
+2. Buat branch fitur baru
+3. Commit changes
+4. Push ke branch
 5. Buat Pull Request
 
 ## ‍💻 Author
