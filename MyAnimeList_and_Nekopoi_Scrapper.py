@@ -141,150 +141,170 @@ def get_anime_data(entry):
         logging.error(f"Error memproses entri: {str(e)}")
         return None
 
-def scrape_nekopoi():
-    """Mengambil jadwal hentai dari Nekopoi.care"""
+def scrape_nekopoi(max_retries=3, use_proxy=False, proxy_list=None):
+    """Mengambil jadwal hentai dari Nekopoi.care dengan retry dan proxy support"""
     global loading_active, data_usage, session_data_usage
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
     }
 
-    try:
-        print_status()
-        # Mulai animasi loading di thread terpisah
-        loading_active = True
-        animation_thread = threading.Thread(target=loading_animation, args=("🔄 Mengambil jadwal hentai Nekopoi...",))
-        animation_thread.daemon = True
-        animation_thread.start()
+    for attempt in range(max_retries):
+        try:
+            # Menggunakan waktu continuous yang sama dari MAL scraping
+            print_status(continuous=True)
+            # Mulai animasi loading di thread terpisah
+            loading_active = True
+            animation_thread = threading.Thread(target=loading_animation, args=("🔄 Mengambil jadwal hentai Nekopoi...",))
+            animation_thread.daemon = True
+            animation_thread.start()
 
-        time.sleep(random.uniform(3, 7))
+            time.sleep(random.uniform(3, 7))
 
-        response = requests.get("https://nekopoi.care/jadwal-new-hentai/", headers=headers, timeout=15)
-        response.raise_for_status()
-        data_usage += len(response.content)
-        session_data_usage += len(response.content)
+            # Setup proxy if enabled
+            proxies = None
+            if use_proxy and proxy_list:
+                proxy = random.choice(proxy_list)
+                proxies = {
+                    'http': proxy,
+                    'https': proxy
+                }
 
-        soup = BeautifulSoup(response.text, 'html.parser')
+            response = requests.get("https://nekopoi.care/jadwal-new-hentai/", headers=headers, timeout=15, proxies=proxies)
+            response.raise_for_status()
+            data_usage += len(response.content)
+            session_data_usage += len(response.content)
 
-        # Temukan semua badan spoiler yang berisi entri hentai
-        nekopoi_data = {}
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Dapatkan semua elemen spoiler-body
-        spoiler_bodies = soup.find_all('div', class_='spoiler-body')
+            # Temukan semua badan spoiler yang berisi entri hentai
+            nekopoi_data = {}
 
-        for spoiler_body in spoiler_bodies:
-            # Temukan semua entri hentai di spoiler ini
-            entries = spoiler_body.find_all('div', recursive=False)
+            # Dapatkan semua elemen spoiler-body
+            spoiler_bodies = soup.find_all('div', class_='spoiler-body')
 
-            for entry in entries:
-                try:
-                    # Judul
-                    title_tag = entry.select_one('h2:nth-child(1) > a')
-                    title = title_tag.get_text(strip=True) if title_tag else None
+            for spoiler_body in spoiler_bodies:
+                # Temukan semua entri hentai di spoiler ini
+                entries = spoiler_body.find_all('div', recursive=False)
 
-                    if not title:
+                for entry in entries:
+                    try:
+                        # Judul
+                        title_tag = entry.select_one('h2:nth-child(1) > a')
+                        title = title_tag.get_text(strip=True) if title_tag else None
+
+                        if not title:
+                            continue
+
+                        # Episode
+                        eps_tag = entry.select_one('h2:nth-child(1) > span')
+                        eps_text = eps_tag.get_text(strip=True) if eps_tag else ''
+                        # Ekstrak nomor episode
+                        eps_match = re.search(r'Episode (\d+)', eps_text)
+                        eps_num = int(eps_match.group(1)) if eps_match else 1
+
+                        # Tanggal Rilis
+                        date_tag = entry.select_one('h2:nth-child(3) > span.release_date')
+                        release_date = date_tag.get_text(strip=True) if date_tag else None
+
+                        if not release_date:
+                            continue
+
+                        # Studio/Produser (coba beberapa pendekatan)
+                        studio = 'Unknown'
+
+                        # Coba selector spesifik terlebih dahulu
+                        studio_tag = entry.select_one('h2:nth-child(3) > span:nth-child(1) > span > span')
+                        if studio_tag:
+                            studio = studio_tag.get_text(strip=True)
+
+                        # Jika tidak ditemukan, coba cari pola "Producer / Label :"
+                        if studio == 'Unknown':
+                            # Cari teks yang berisi "Producer / Label :"
+                            producer_text = entry.find(text=lambda text: text and 'Producer / Label :' in text)
+                            if producer_text:
+                                # Ekstrak nama studio setelah "Producer / Label :"
+                                text_parts = producer_text.split('Producer / Label :')
+                                if len(text_parts) > 1:
+                                    studio = text_parts[1].strip()
+
+                        # Kelompokkan berdasarkan tanggal rilis
+                        if release_date not in nekopoi_data:
+                            nekopoi_data[release_date] = {}
+
+                        if title not in nekopoi_data[release_date]:
+                            nekopoi_data[release_date][title] = {'episodes': [eps_num], 'studio': studio}
+                        else:
+                            # Perbarui studio jika ditemukan dan sebelumnya Unknown
+                            if studio != 'Unknown' and nekopoi_data[release_date][title]['studio'] == 'Unknown':
+                                nekopoi_data[release_date][title]['studio'] = studio
+                            nekopoi_data[release_date][title]['episodes'].append(eps_num)
+
+                    except Exception as e:
+                        logging.warning(f"Error parsing entri Nekopoi: {str(e)}")
                         continue
 
-                    # Episode
-                    eps_tag = entry.select_one('h2:nth-child(1) > span')
-                    eps_text = eps_tag.get_text(strip=True) if eps_tag else ''
-                    # Ekstrak nomor episode
-                    eps_match = re.search(r'Episode (\d+)', eps_text)
-                    eps_num = int(eps_match.group(1)) if eps_match else 1
-
-                    # Tanggal Rilis
-                    date_tag = entry.select_one('h2:nth-child(3) > span.release_date')
-                    release_date = date_tag.get_text(strip=True) if date_tag else None
-
-                    if not release_date:
-                        continue
-
-                    # Studio/Produser (coba beberapa pendekatan)
-                    studio = 'Unknown'
-
-                    # Coba selector spesifik terlebih dahulu
-                    studio_tag = entry.select_one('h2:nth-child(3) > span:nth-child(1) > span > span')
-                    if studio_tag:
-                        studio = studio_tag.get_text(strip=True)
-
-                    # Jika tidak ditemukan, coba cari pola "Producer / Label :"
-                    if studio == 'Unknown':
-                        # Cari teks yang berisi "Producer / Label :"
-                        producer_text = entry.find(text=lambda text: text and 'Producer / Label :' in text)
-                        if producer_text:
-                            # Ekstrak nama studio setelah "Producer / Label :"
-                            text_parts = producer_text.split('Producer / Label :')
-                            if len(text_parts) > 1:
-                                studio = text_parts[1].strip()
-
-                    # Kelompokkan berdasarkan tanggal rilis
-                    if release_date not in nekopoi_data:
-                        nekopoi_data[release_date] = {}
-
-                    if title not in nekopoi_data[release_date]:
-                        nekopoi_data[release_date][title] = {'episodes': [eps_num], 'studio': studio}
+            # Proses data untuk menggabungkan episode
+            processed_data = {}
+            for date, titles in nekopoi_data.items():
+                processed_data[date] = []
+                for title, data in titles.items():
+                    episodes = data['episodes']
+                    studio = data['studio']
+                    episodes.sort()
+                    if len(episodes) == 1:
+                        eps_str = f"Episode {episodes[0]}"
+                    elif len(episodes) == 2:
+                        eps_str = f"Episode {episodes[0]} & {episodes[1]}"
                     else:
-                        # Perbarui studio jika ditemukan dan sebelumnya Unknown
-                        if studio != 'Unknown' and nekopoi_data[release_date][title]['studio'] == 'Unknown':
-                            nekopoi_data[release_date][title]['studio'] = studio
-                        nekopoi_data[release_date][title]['episodes'].append(eps_num)
+                        eps_str = f"Episode {episodes[0]} - {episodes[-1]}"
 
-                except Exception as e:
-                    logging.warning(f"Error parsing entri Nekopoi: {str(e)}")
-                    continue
+                    processed_data[date].append({
+                        'title': title,
+                        'episodes': eps_str,
+                        'studio': studio
+                    })
 
-        # Proses data untuk menggabungkan episode
-        processed_data = {}
-        for date, titles in nekopoi_data.items():
-            processed_data[date] = []
-            for title, data in titles.items():
-                episodes = data['episodes']
-                studio = data['studio']
-                episodes.sort()
-                if len(episodes) == 1:
-                    eps_str = f"Episode {episodes[0]}"
-                elif len(episodes) == 2:
-                    eps_str = f"Episode {episodes[0]} & {episodes[1]}"
-                else:
-                    eps_str = f"Episode {episodes[0]} - {episodes[-1]}"
+            # Dapatkan tanggal update terakhir
+            last_update_tag = soup.select_one('#content > div.postsbody > div > div.contentpost > p:nth-child(14) > span > em > strong')
+            last_update = "Unknown"
+            if last_update_tag:
+                last_update_text = last_update_tag.get_text(strip=True)
+                # Ekstrak tanggal dari format seperti "[Update Terakhir 18 Agustus 2025]"
+                date_match = re.search(r'(\d{1,2}\s+\w+\s+\d{4})', last_update_text)
+                if date_match:
+                    last_update = date_match.group(1)
 
-                processed_data[date].append({
-                    'title': title,
-                    'episodes': eps_str,
-                    'studio': studio
-                })
+            # Hentikan animasi loading
+            loading_active = False
+            time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
+            animation_thread.join()
 
-        # Dapatkan tanggal update terakhir
-        last_update_tag = soup.select_one('#content > div.postsbody > div > div.contentpost > p:nth-child(14) > span > em > strong')
-        last_update = "Unknown"
-        if last_update_tag:
-            last_update_text = last_update_tag.get_text(strip=True)
-            # Ekstrak tanggal dari format seperti "[Update Terakhir 18 Agustus 2025]"
-            date_match = re.search(r'(\d{1,2}\s+\w+\s+\d{4})', last_update_text)
-            if date_match:
-                last_update = date_match.group(1)
+            logging.info(f"\n🔍 Ditemukan entri Nekopoi untuk {len(processed_data)} tanggal")
+            return processed_data, last_update
 
-        # Hentikan animasi loading
-        loading_active = False
-        time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
-        animation_thread.join()
+        except Exception as e:
+            # Hentikan animasi loading
+            loading_active = False
+            time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
+            animation_thread.join()
 
-        logging.info(f"\n🔍 Ditemukan entri Nekopoi untuk {len(processed_data)} tanggal")
-        return processed_data, last_update
+            if attempt < max_retries - 1:
+                logging.warning(f"❌ Attempt {attempt + 1} failed: {str(e)}. Retrying...")
+                time.sleep(2 ** attempt)  # Exponential backoff
+            else:
+                logging.error(f"❌ All {max_retries} attempts failed. Last error: {str(e)}")
+                return {}, "Unknown"
 
-    except Exception as e:
-        # Hentikan animasi loading
-        loading_active = False
-        time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
-        animation_thread.join()
-
-        logging.error(f"❌ Error scraping Nekopoi: {str(e)}")
-        return {}, "Unknown"
-
-def print_status():
+def print_status(scraping_start_time=None, continuous=False):
     """Print scrapping time, data usage, and current time."""
-    global start_time, data_usage, session_data_usage
-    elapsed = time.time() - start_time
+    global start_time, data_usage, session_data_usage, continuous_scraping_start
+    if continuous and hasattr(print_status, 'continuous_start'):
+        elapsed = time.time() - print_status.continuous_start
+    elif scraping_start_time:
+        elapsed = time.time() - scraping_start_time
+    else:
+        elapsed = time.time() - start_time
     minutes = int(elapsed // 60)
     seconds = int(elapsed % 60)
     time_str = f"{minutes:02d}:{seconds:02d}"
@@ -302,117 +322,170 @@ def print_status():
         total_str = f"{total_kb} KB"
     print(f"Scrapping time {time_str} Data Usage : {session_str} Total Data Usage : {total_str}")
 
-def scrape_mal_seasonal(url):
-    """Fungsi scraping utama untuk halaman musiman MyAnimeList."""
+def scrape_mal_seasonal(url, max_retries=3, use_proxy=False, proxy_list=None):
+    """Fungsi scraping utama untuk halaman musiman MyAnimeList dengan retry dan proxy support."""
     global loading_active, data_usage, session_data_usage
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
     }
 
-    try:
-        print_status()
-        # Mulai animasi loading di thread terpisah
-        loading_active = True
-        animation_thread = threading.Thread(target=loading_animation, args=("🔄 Mengambil halaman musiman MyAnimeList...",))
-        animation_thread.daemon = True
-        animation_thread.start()
+    for attempt in range(max_retries):
+        try:
+            scraping_start_time = time.time()
+            if not hasattr(print_status, 'continuous_start'):
+                print_status.continuous_start = scraping_start_time
+            print_status(scraping_start_time, continuous=True)
+            # Mulai animasi loading di thread terpisah
+            loading_active = True
+            animation_thread = threading.Thread(target=loading_animation, args=("🔄 Mengambil halaman musiman MyAnimeList...",))
+            animation_thread.daemon = True
+            animation_thread.start()
 
-        time.sleep(random.uniform(3, 7))
+            time.sleep(random.uniform(3, 7))
 
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
-        data_usage += len(response.content)
-        session_data_usage += len(response.content)
-        
-        if "captcha" in response.url.lower():
-            raise Exception("Diblokir oleh CAPTCHA")
-        
-        soup = BeautifulSoup(response.text, 'html.parser')
-        anime_data = {}
+            # Setup proxy if enabled
+            proxies = None
+            if use_proxy and proxy_list:
+                proxy = random.choice(proxy_list)
+                proxies = {
+                    'http': proxy,
+                    'https': proxy
+                }
 
-        # Definisikan selector untuk setiap kategori
-        category_selectors = {
-            'TV (New)': '#content > div.js-categories-seasonal > div:nth-child(1)',
-            'TV (Continuing)': '#content > div.js-categories-seasonal > div:nth-child(3)',
-            'ONA': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-5',
-            'OVA': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-2',
-            'Movie': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-3',
-            'Special': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-4',
-            'Unknown': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-0'
-        }
+            response = requests.get(url, headers=headers, timeout=15, proxies=proxies)
+            response.raise_for_status()
+            data_usage += len(response.content)
+            session_data_usage += len(response.content)
 
-        total_entries = 0
-        categories = {cat: [] for cat in category_selectors}
-        log_messages = []
+            if "captcha" in response.url.lower():
+                raise Exception("Diblokir oleh CAPTCHA")
 
-        for cat, sel in category_selectors.items():
-            container = soup.select_one(sel)
-            if container:
-                anime_entries = container.find_all('div', class_='js-seasonal-anime') or \
-                                container.find_all('div', class_='seasonal-anime')
-                log_messages.append(f"\n🔍 Ditemukan {len(anime_entries)} entri anime untuk {cat}")
-                total_entries += len(anime_entries)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            anime_data = {}
 
-                for entry in anime_entries:
-                    data = get_anime_data(entry)
-                    if not data:
-                        continue
+            # Definisikan selector untuk setiap kategori
+            category_selectors = {
+                'TV (New)': '#content > div.js-categories-seasonal > div:nth-child(1)',
+                'TV (Continuing)': '#content > div.js-categories-seasonal > div:nth-child(3)',
+                'ONA': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-5',
+                'OVA': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-2',
+                'Movie': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-3',
+                'Special': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-4',
+                'Unknown': '#content > div.js-categories-seasonal > div.seasonal-anime-list.js-seasonal-anime-list.js-seasonal-anime-list-key-0'
+            }
 
-                    data['category'] = cat
+            total_entries = 0
+            categories = {cat: [] for cat in category_selectors}
+            log_messages = []
 
-                    # Format tanggal rilis
-                    try:
-                        date_obj = datetime.strptime(data['date'], '%b %d, %Y')
-                        formatted_date = date_obj.strftime('%d %B')  # Diperbaiki untuk kompatibilitas Windows
-                        translated_date = translate_month(formatted_date)
-                    except ValueError:
-                        translated_date = data['date']
+            for cat, sel in category_selectors.items():
+                container = soup.select_one(sel)
+                if container:
+                    anime_entries = container.find_all('div', class_='js-seasonal-anime') or \
+                                    container.find_all('div', class_='seasonal-anime')
+                    log_messages.append(f"\n🔍 Ditemukan {len(anime_entries)} entri anime untuk {cat}")
+                    total_entries += len(anime_entries)
 
-                    # Simpan tanggal yang diterjemahkan dalam data
-                    data['translated_date'] = translated_date
+                    for entry in anime_entries:
+                        data = get_anime_data(entry)
+                        if not data:
+                            continue
 
-                    # Gunakan tanggal asli sebagai kunci untuk parsing yang konsisten
-                    key = data['date']
-                    if key not in anime_data:
-                        anime_data[key] = []
-                    anime_data[key].append(data)
+                        data['category'] = cat
 
-                    categories[cat].append(data)
+                        # Format tanggal rilis
+                        try:
+                            date_obj = datetime.strptime(data['date'], '%b %d, %Y')
+                            formatted_date = date_obj.strftime('%d %B')  # Diperbaiki untuk kompatibilitas Windows
+                            translated_date = translate_month(formatted_date)
+                        except ValueError:
+                            translated_date = data['date']
+
+                        # Simpan tanggal yang diterjemahkan dalam data
+                        data['translated_date'] = translated_date
+
+                        # Gunakan tanggal asli sebagai kunci untuk parsing yang konsisten
+                        key = data['date']
+                        if key not in anime_data:
+                            anime_data[key] = []
+                        anime_data[key].append(data)
+
+                        categories[cat].append(data)
+                else:
+                    logging.info(f"🔍 Tidak ada entri yang ditemukan untuk {cat}")
+
+            # Cetak pesan kategori
+            for msg in log_messages:
+                logging.info(msg)
+
+            # Hentikan animasi loading
+            loading_active = False
+            time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
+            animation_thread.join()
+
+            logging.info(f"\n🔍 Total entri anime ditemukan: {total_entries}\n")
+
+            return anime_data, categories
+
+        except Exception as e:
+            # Hentikan animasi loading
+            loading_active = False
+            time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
+            animation_thread.join()
+
+            if attempt < max_retries - 1:
+                logging.warning(f"❌ Attempt {attempt + 1} failed: {str(e)}. Retrying...")
+                time.sleep(2 ** attempt)  # Exponential backoff
             else:
-                logging.info(f"🔍 Tidak ada entri yang ditemukan untuk {cat}")
-
-        # Cetak pesan kategori
-        for msg in log_messages:
-            logging.info(msg)
-
-        # Hentikan animasi loading
-        loading_active = False
-        time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
-        animation_thread.join()
-
-        logging.info(f"\n🔍 Total entri anime ditemukan: {total_entries}\n")
-
-        return anime_data, categories
-
-    except Exception as e:
-        # Hentikan animasi loading
-        loading_active = False
-        time.sleep(0.2)  # Berikan waktu thread animasi untuk selesai
-        animation_thread.join()
-
-        logging.error(f"❌ Error scraping: {str(e)}")
-        return {}, {}
+                logging.error(f"❌ All {max_retries} attempts failed. Last error: {str(e)}")
+                return {}, {}
 
 def save_to_file(anime_data, categories, output_path, member_threshold=10000, nekopoi_data=None, nekopoi_last_update="Unknown", filter_year=2025, season_name="Unknown", year="2025"):
     """Menyimpan data anime ke dalam file."""
+    # Hitung bulan nekopoi secara dinamis berdasarkan data yang diambil
+    current_month = datetime.now().month  # Bulan saat ini
+    months_in_nekopoi = set()  # Set untuk menyimpan bulan unik dari data nekopoi
+    if nekopoi_data:
+        # Peta nama bulan Indonesia ke angka
+        month_map = {
+            'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
+            'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
+        }
+        # Ekstrak bulan dari setiap tanggal di data nekopoi
+        for date in nekopoi_data.keys():
+            parts = date.split()
+            if len(parts) >= 3:
+                month_str = parts[1]  # Nama bulan (misalnya 'Juni')
+                month = month_map.get(month_str)
+                if month:
+                    months_in_nekopoi.add(month)  # Tambahkan bulan ke set
+
+    # Jumlah bulan unik di nekopoi, default 2 jika tidak ada data
+    nekopoi_month = len(months_in_nekopoi) if months_in_nekopoi else 2
+    if months_in_nekopoi:
+        first_month = min(months_in_nekopoi)  # Bulan pertama di data
+        last_month = max(months_in_nekopoi)   # Bulan terakhir di data
+        # Bulan yang telah berlalu: dari bulan pertama hingga bulan sebelum saat ini
+        month_has_passed = current_month - first_month
+        # Bulan ke depan: bulan setelah bulan saat ini hingga bulan terakhir
+        month_ahead = last_month - current_month
+        # Tentukan teks untuk bulan ke depan
+        if month_ahead <= 0:
+            ahead_text = "dan bulan terakhir adalah bulan ini"
+        else:
+            ahead_text = f"{month_ahead} bulan ke depan"
+    else:
+        month_has_passed = 0
+        ahead_text = "tidak ada data"
+
     # cspell:disable-next-line
     header_template = """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
-           {year}
-Member : {member}
+            {year}
+𝙼𝚎𝚖𝚋𝚎𝚛 : {member}
 
 Latest Information :
-Inget : Anime Hentai yg w ambil ada 2 sumber, yg pastinya syudah jelas mana yg bakal up dluan :v jdi w pisahin list nya biar gk bingung. Ohh iya di list punya ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 jadwalnya cuma 2 bulan
+Inget : Anime Hentai yg w ambil ada 2 sumber, yg pastinya syudah jelas mana yg bakal up dluan :v jdi w pisahin list nya biar gk bingung. Ohh iya di list punya ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 jadwalnya cuma {nekopoi_month} bulan (dengan {month_has_passed} bulan telah berlalu, {ahead_text})
 
 Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
 - Tanggal Rilis
@@ -472,8 +545,11 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
     }
     fancy_year = ''.join(number_mapping.get(char, char) for char in str(year))
 
+    # Konversi member threshold ke angka fancy
+    fancy_member = ''.join(number_mapping.get(char, char) for char in str(member_threshold))
+
     # Ganti placeholder di header
-    header = header_template.replace("{season}", fancy_season).replace("{year}", fancy_year).replace("{member}", str(member_threshold))
+    header = header_template.replace("{season}", fancy_season).replace("{year}", fancy_year).replace("{member}", fancy_member).replace("{nekopoi_month}", str(nekopoi_month)).replace("{month_has_passed}", str(month_has_passed)).replace("{ahead_text}", ahead_text)
 
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(header)
@@ -622,7 +698,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
             f.write("*𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝*\n")
             f.write("=" * 50 + "\n")
             for cat in category_order:
-                f.write(f"\n- *{cat}:*\n")
+                f.write(f"- *{cat}:*\n")
                 if cat in normal_by_category and normal_by_category[cat]:
                     from collections import defaultdict
                     group_dict = defaultdict(list)
@@ -662,7 +738,7 @@ def tampilkan_header():
     """Menampilkan header program"""
     logging.info("="*65)
     logging.info("               MyAnimeList dan NekoPoi SCRAPPER")
-    logging.info("                   VERSI 12 - TheKingTermux")
+    logging.info("                   VERSI 13 - TheKingTermux")
     logging.info("="*65)
     logging.info(" Script ini akan mengambil data anime seasonal dari MyAnimeList")
     logging.info(" Normal maupun Hentai dan akan mengambil data anime Hentai dari")
@@ -794,7 +870,7 @@ def main():
     # Sekarang scrape data menggunakan URL yang dibuat secara dinamis
     anime_data, categories = scrape_mal_seasonal(url)
 
-    # Scrape data Nekopoi
+    # Scrape data Nekopoi (lanjutkan waktu dari MAL scraping)
     nekopoi_data, nekopoi_last_update = scrape_nekopoi()
 
     # Simpan ke file
@@ -858,4 +934,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
