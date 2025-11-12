@@ -8,6 +8,7 @@
 
 > Scraper otomatis untuk mengumpulkan data dari MyAnimeList & Nekopoi, dibuat dengan Python + Requests + BeautifulSoup.  
 > Dibungkus dengan `.bat` installer supaya gampang dijalankan siapa aja 🚀
+> Gunakan `gui_scraper.py` untuk fitur yang lebih lengkap!
 
 ## ✨ Fitur
 - 🔍 Mengambil data anime musiman (Normal, Erotica, Hentai) dari **MyAnimeList**
