@@ -68,13 +68,13 @@ Cukup klik 2x `Start.bat` maka tools akan langsung bekerja secara otomatis
 
 4 → Keluar
 
-### 🎨 Menggunakan GUI Desktop
+## 🎨 Menggunakan GUI Desktop
 
 ```bash
 python gui_scraper.py
 ```
 
-**Fitur GUI:**
+### Fitur GUI:
 - Dukungan 9 bahasa (Indonesia, English, Japanese, Spanish, Chinese, Korean, French, German, Portuguese)
 - Form input untuk tahun, musim, threshold member
 - Opsi Scraping Terpisah: Checkbox untuk memilih MAL saja, Nekopoi saja, atau keduanya
