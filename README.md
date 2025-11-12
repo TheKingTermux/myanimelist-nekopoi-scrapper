@@ -6,9 +6,11 @@
 ![GitHub Release](https://img.shields.io/github/v/release/TheKingTermux/myanimelist-nekopoi-scrapper)
 [![Dibuat dengan ❤️](https://img.shields.io/badge/Dibuat%20dengan-%E2%9D%A4-red)]()
 
-> Scraper otomatis untuk mengumpulkan data dari MyAnimeList & Nekopoi, dibuat dengan Python + Requests + BeautifulSoup.  
+> Scraper otomatis untuk mengumpulkan data dari MyAnimeList & Nekopoi, dibuat dengan Python + Requests + BeautifulSoup.
+> 
 > Dibungkus dengan `.bat` installer supaya gampang dijalankan siapa aja 🚀
-> Gunakan `gui_scraper.py` untuk fitur yang lebih lengkap!
+>  
+> Gunakan `gui_scraper.py` untuk fitur yang lebih lengkap!.
 
 ## ✨ Fitur
 - 🔍 Mengambil data anime musiman (Normal, Erotica, Hentai) dari **MyAnimeList**
