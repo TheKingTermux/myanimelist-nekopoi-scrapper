@@ -9,23 +9,27 @@ echo.
 echo                               MyAnimeList and Nekopoi Scrapper Loader
 echo                                   Developer : TheKingTermux-Sama
 echo.
-echo                   _______________________________________________________________
+echo                    _______________________________________________________________
 echo                  ^|                                                               ^|
 echo                  ^|      [1] Run The Scraper                                      ^|
 echo                  ^|      ___________________________________________________      ^|
 echo                  ^|                                                               ^|
-echo                  ^|      [2] Install / Update Requirements                        ^|
+echo                  ^|      [2] Run The GUI                                          ^|
 echo                  ^|      ___________________________________________________      ^|
 echo                  ^|                                                               ^|
-echo                  ^|      [3] Exit                                                 ^|
+echo                  ^|      [3] Install / Update Requirements                        ^|
+echo                  ^|      ___________________________________________________      ^|
+echo                  ^|                                                               ^|
+echo                  ^|      [4] Exit                                                 ^|
 echo                  ^|_______________________________________________________________^|
 
 echo:
-set /p pil= Masukkan Pilihan Anda [1-3] : 
+set /p pil= Masukkan Pilihan Anda [1-4] :
 
 if "%pil%"=="1" goto RunCheck
-if "%pil%"=="2" goto InstallReq
-if "%pil%"=="3" goto Exit
+if "%pil%"=="2" goto RunGUI
+if "%pil%"=="3" goto InstallReq
+if "%pil%"=="4" goto Exit
 goto MainMenu
 
 :RunCheck
@@ -43,22 +47,24 @@ if %errorlevel% neq 0 (
     echo.
     goto InstallReqAndRun
 ) else (
-    goto SelectLang
+    goto SelectMode
 )
 
-:SelectLang
+:SelectMode
 cls
 echo ============================================
-echo      Pilih Bahasa / Choose Language
+echo      Pilih Mode / Choose Mode
 echo ============================================
 echo.
-echo [1] Bahasa Indonesia
-echo [2] English
+echo [1] CLI Scraper (Bahasa Indonesia)
+echo [2] CLI Scraper (English)
+echo [3] GUI Scraper (Multi-language)
 echo.
-set /p lang= Silakan pilih (1-2): 
-if "%lang%"=="1" goto RunIndo
-if "%lang%"=="2" goto RunEng
-goto SelectLang
+set /p mode= Silakan pilih (1-3):
+if "%mode%"=="1" goto RunIndo
+if "%mode%"=="2" goto RunEng
+if "%mode%"=="3" goto RunGUI
+goto SelectMode
 
 :InstallReqAndRun
 cls
@@ -68,7 +74,7 @@ pip install -r requirements.txt
 echo.
 echo Semua library sudah terinstall!
 echo.
-goto SelectLang
+goto SelectMode
 
 :InstallReq
 cls
@@ -102,6 +108,18 @@ echo [Y] Scrape again |  [N] Back
 echo -------------------------------
 set /p ulang= Choose [Y/N]: 
 if /I "%ulang%"=="Y" goto RunEng
+if /I "%ulang%"=="N" goto MainMenu
+goto MainMenu
+
+:RunGUI
+cls
+python gui_scraper.py
+echo.
+echo -------------------------------
+echo [Y] Run GUI again | [N] Back to Menu
+echo -------------------------------
+set /p ulang= Choose [Y/N]: 
+if /I "%ulang%"=="Y" goto RunGUI
 if /I "%ulang%"=="N" goto MainMenu
 goto MainMenu
 
