@@ -11,7 +11,7 @@ echo                                   Developer : TheKingTermux-Sama
 echo.
 echo                    _______________________________________________________________
 echo                  ^|                                                               ^|
-echo                  ^|      [1] Run The Scraper                                      ^|
+echo                  ^|      [1] Run The Scraper (English / Indonesia only)           ^|
 echo                  ^|      ___________________________________________________      ^|
 echo                  ^|                                                               ^|
 echo                  ^|      [2] Run The GUI                                          ^|
@@ -36,14 +36,14 @@ goto MainMenu
 :: Cek apakah Python sudah terinstall
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Python belum terinstall. Mengunduh...
+    echo Python is not installed. Downloading...
     powershell -Command "Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.13.3/python-3.13.3-amd64.exe -OutFile python-installer.exe"
     echo.
-    echo Menginstall Python, tunggu sebentar...
+    echo Installing Python, please wait a moment...
     start /wait python-installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
     del python-installer.exe
     echo.
-    echo Python sudah siap!
+    echo Python is ready!
     echo.
     goto InstallReqAndRun
 ) else (
@@ -68,21 +68,21 @@ goto SelectMode
 
 :InstallReqAndRun
 cls
-echo Menginstall library yang dibutuhkan...
+echo Installing the required libraries...
 pip install --upgrade pip
 pip install -r requirements.txt
 echo.
-echo Semua library sudah terinstall!
+echo All libraries are now installed!
 echo.
 goto SelectMode
 
 :InstallReq
 cls
-echo Menginstall library yang dibutuhkan...
+echo Installing the required libraries...
 pip install --upgrade pip
 pip install -r requirements.txt
 echo.
-echo Semua library sudah terinstall!
+echo All libraries are now installed!
 echo.
 pause
 goto MainMenu
