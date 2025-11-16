@@ -27,6 +27,9 @@ from MyAnimeList_and_Nekopoi_Scrapper import (
 # Import localization
 from localization import i18n
 
+# Import localization
+from localization import i18n
+
 class AnimeScraperGUI:
     def __init__(self, root):
         self.root = root
@@ -92,12 +95,11 @@ class AnimeScraperGUI:
 
         # Scrape Options
         ttk.Label(input_frame, text=i18n.get('scrape_options_label', default="Scrape Options:")).grid(row=4, column=0, sticky=tk.W, pady=2)
-        self.scrape_mal_var = tk.BooleanVar(value=True)
-        self.scrape_nekopoi_var = tk.BooleanVar(value=True)
-        mal_check = ttk.Checkbutton(input_frame, text="MyAnimeList", variable=self.scrape_mal_var)
-        mal_check.grid(row=4, column=1, sticky=tk.W, pady=2)
-        nekopoi_check = ttk.Checkbutton(input_frame, text="Nekopoi", variable=self.scrape_nekopoi_var)
-        nekopoi_check.grid(row=5, column=1, sticky=tk.W, pady=2)
+        self.scrape_option_var = tk.StringVar(value=i18n.get('scrape_both_option') if self.current_lang == 'id' else i18n.get('scrape_mal_option'))
+        self.scrape_combo = ttk.Combobox(input_frame, textvariable=self.scrape_option_var,
+                                        values=[i18n.get('scrape_mal_option'), i18n.get('scrape_nekopoi_option'), i18n.get('scrape_both_option')],
+                                        state="readonly", width=10)
+        self.scrape_combo.grid(row=4, column=1, sticky=(tk.W, tk.E), pady=2)
 
         # Buttons
         button_frame = ttk.Frame(main_frame)
@@ -173,8 +175,9 @@ class AnimeScraperGUI:
             year = int(self.year_var.get())
             season = self.season_var.get()
             threshold = int(self.member_threshold_var.get())
-            scrape_mal = self.scrape_mal_var.get()
-            scrape_nekopoi = self.scrape_nekopoi_var.get()
+            option = self.scrape_option_var.get()
+            scrape_mal = option == i18n.get('scrape_mal_option') or option == i18n.get('scrape_both_option')
+            scrape_nekopoi = option == i18n.get('scrape_nekopoi_option') or option == i18n.get('scrape_both_option')
 
             anime_data = {}
             nekopoi_data = {}
@@ -277,8 +280,9 @@ class AnimeScraperGUI:
             return
 
         # Check if user selected sources but no data was scraped
-        scrape_mal = self.scrape_mal_var.get()
-        scrape_nekopoi = self.scrape_nekopoi_var.get()
+        option = self.scrape_option_var.get()
+        scrape_mal = option == i18n.get('scrape_mal_option') or option == i18n.get('scrape_both_option')
+        scrape_nekopoi = option == i18n.get('scrape_nekopoi_option') or option == i18n.get('scrape_both_option')
 
         if scrape_mal and not self.scraped_data:
             messagebox.showwarning(i18n.get('warning_title'), i18n.get('mal_scrape_failed', default="MyAnimeList scraping failed or returned no data"))
@@ -290,11 +294,24 @@ class AnimeScraperGUI:
 
         # Get output path
         format_ext = self.output_format_var.get()
-        default_name = f"AnimeList_{self.season_var.get().capitalize()}{self.year_var.get()}.{format_ext}"
+        season_english = self.season_var.get().capitalize()
+        year_str = self.year_var.get()
+        threshold = int(self.member_threshold_var.get())
+        default_name = f"{season_english}{year_str}.{format_ext}"
+        if threshold != 10000:
+            threshold_str = f"{threshold // 1000}K" if threshold % 1000 == 0 else str(threshold)
+            default_name = default_name.replace(f".{format_ext}", f"Member{threshold_str}.{format_ext}")
+
+        # Default to AnimeList folder like main script
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        output_dir = os.path.join(script_dir, "AnimeList")
+        os.makedirs(output_dir, exist_ok=True)
+
         file_path = filedialog.asksaveasfilename(
             defaultextension=f".{format_ext}",
             filetypes=[(f"{format_ext.upper()} files", f"*.{format_ext}"), ("All files", "*.*")],
-            initialfile=default_name
+            initialfile=default_name,
+            initialdir=output_dir
         )
 
         if not file_path:
@@ -311,7 +328,7 @@ class AnimeScraperGUI:
 
             if format_ext == "txt":
                 save_to_file(self.scraped_data, self.categories, file_path, threshold,
-                           nekopoi_data, nekopoi_last_update, year, season_name, str(year))
+                            nekopoi_data, nekopoi_last_update, year, season_name, str(year))
             elif format_ext == "json":
                 self.save_as_json(file_path)
             elif format_ext == "csv":
@@ -414,6 +431,7 @@ class AnimeScraperGUI:
                     y_position -= 15
 
         c.save()
+
 
     def open_filter_window(self):
         if not self.scraped_data and not self.nekopoi_data:
@@ -526,6 +544,9 @@ class AnimeScraperGUI:
             lang_code = selected.split(' - ')[0]
             if i18n.set_language(lang_code):
                 self.current_lang = lang_code
+                # Update scrape options
+                self.scrape_combo['values'] = [i18n.get('scrape_mal_option'), i18n.get('scrape_nekopoi_option'), i18n.get('scrape_both_option')]
+                self.scrape_option_var.set(i18n.get('scrape_both_option') if lang_code == 'id' else i18n.get('scrape_mal_option'))
                 self.refresh_ui_texts()
 
     def refresh_ui_texts(self):
