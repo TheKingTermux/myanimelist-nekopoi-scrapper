@@ -322,13 +322,27 @@ class AnimeScraperGUI:
             year = int(self.year_var.get())
             season_name = {"winter": "Musim Dingin", "spring": "Semi", "summer": "Panas", "fall": "Gugur"}.get(self.season_var.get(), self.season_var.get())
 
+            # Determine header template based on scrape option
+            option = self.scrape_option_var.get()
+            if option == i18n.get('scrape_both_option'):
+                template_key = 'header_template_both'
+            elif option == i18n.get('scrape_mal_option'):
+                template_key = 'header_template_mal'
+            elif option == i18n.get('scrape_nekopoi_option'):
+                template_key = 'header_template_nekopoi'
+            else:
+                template_key = 'header_template_both'  # default
+            header_template = i18n.get(template_key)
+
             # Only pass Nekopoi data if it was scraped
-            nekopoi_data = self.nekopoi_data if self.scrape_nekopoi_var.get() else {}
-            nekopoi_last_update = self.nekopoi_last_update if self.scrape_nekopoi_var.get() else "Unknown"
+            scrape_mal = option == i18n.get('scrape_mal_option') or option == i18n.get('scrape_both_option')
+            scrape_nekopoi = option == i18n.get('scrape_nekopoi_option') or option == i18n.get('scrape_both_option')
+            nekopoi_data = self.nekopoi_data if scrape_nekopoi else {}
+            nekopoi_last_update = self.nekopoi_last_update if scrape_nekopoi else "Unknown"
 
             if format_ext == "txt":
                 save_to_file(self.scraped_data, self.categories, file_path, threshold,
-                            nekopoi_data, nekopoi_last_update, year, season_name, str(year))
+                            nekopoi_data, nekopoi_last_update, year, season_name, str(year), header_template)
             elif format_ext == "json":
                 self.save_as_json(file_path)
             elif format_ext == "csv":
