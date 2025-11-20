@@ -26,7 +26,7 @@
 ### Fixed
 - N/A (initial release)
 
-## [11.1] - 2025-09-16
+## [11.1] - 2025-09-30
 
 ### Added
 - Script source
@@ -39,7 +39,7 @@
 - Change EN Main Script to same as ID Main Script
 - Change Phrase
 
-## [12] - 2025-09-16
+## [12] - 2025-10-13
 
 ### Added
 - Added global data_usage and session_data_usage variables.
@@ -111,4 +111,5 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 
