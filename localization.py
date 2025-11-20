@@ -76,7 +76,7 @@ Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒
 > Judul Hentai
 ^ Studio
 ! Genre Hentai (ABSOLUTELY SECRET) Soalnya gatau genrenya :v
-+ Episode yg bakal dirilis (Mksdnya tuh di tanggal ini eps berapa yg bakal dirilis di ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒)
++ Episode yg bakal dirilis (Mksdnya tuh di tanggal ini eps berapa yg bakal dirilis di ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒)
 
 Common Information for Normal Anime list :
 - Tanggal Rilis
@@ -98,7 +98,7 @@ Info tambahan :
 Kalau di akhiran genre dipisah dan dibelakang genrenya ada tanda ! (tanda seru) + cetak tebal artinya awas ae soalnya genrenya dah aneh / nyeleweng dan biasanya genre itu masuk di "Danger Anime Genre", jdi usahakan dibaca dlu dan dipahami baek" soalnya klo ada apa" bukan salah Admin / yg share rekomendasi klo ente masih tetep nonton tu anime yg ada genre bahaya 🙂
 
 Disclaimer :
-Semua Normal Anime list dan Sebagian Hentai Anime List diambil dari ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 dan Sebagian Hentai Anime Listmya lagi diambil dari ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒 gk smua anime yg muncul w tulis :v
+Semua Normal Anime list dan Sebagian Hentai Anime List diambil dari ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 dan Sebagian Hentai Anime Listmya lagi diambil dari ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 gk smua anime yg muncul w tulis :v
 Intinya w ambil yg menurut w menarik ae :v
 
 Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
@@ -144,14 +144,14 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
             'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 𝙷𝚎𝚗𝚝𝚊𝚒  𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
             {first_month - last_month} {year}
 Latest Information :
-Jadwal ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒 cuma {nekopoi_month} bulan (dengan {month_has_passed} bulan telah berlalu, {ahead_text})
+Jadwal ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 cuma {nekopoi_month} bulan (dengan {month_has_passed} bulan telah berlalu, {ahead_text})
 
-Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒 Anime list :
+Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 Anime list :
 - Tanggal Rilis
 > Judul Hentai
 ^ Studio
 ! Genre Hentai (ABSOLUTELY SECRET) Soalnya gatau genrenya :v
-+ Episode yg bakal dirilis (Mksdnya tuh di tanggal ini eps berapa yg bakal dirilis di ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒)
++ Episode yg bakal dirilis (Mksdnya tuh di tanggal ini eps berapa yg bakal dirilis di ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒)
 
 Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
 Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
@@ -215,7 +215,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
   Member : {member}
 
   Latest Information :
-  Note : The hentai anime I take comes from 2 sources, which clearly show which one will be released first :v so I separate the list so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒 list is only {nekopoi_month} months (with {month_has_passed} months have passed, {ahead_text})
+  Note : The hentai anime I take comes from 2 sources, which clearly show which one will be released first :v so I separate the list so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 list is only {nekopoi_month} months (with {month_has_passed} months have passed, {ahead_text})
 
   Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
   - Release Date
@@ -225,12 +225,12 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
   + Number of Episodes (if available)
   ~ Minutes per Episode (if available)
 
-  Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒 Anime list :
+  Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 Anime list :
   - Release Date
   > Hentai Title
   ^ Studio
   ! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
-  + Episodes to be released (Meaning which episode will be released on this date in ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒)
+  + Episodes to be released (Meaning which episode will be released on this date in ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒)
 
   Common Information for Normal Anime list :
   - Release Date
@@ -252,7 +252,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
   If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read first and understand well" so that if there is something wrong it's not the fault of the Admin / recommender if you still watch that dangerous genre anime 🙂
 
   Disclaimer :
-  All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚂𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears I write :v
+  All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears I write :v
   Basically I take what I think is interesting :v
 
   Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
