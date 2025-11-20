@@ -27,7 +27,7 @@ echo:
 set /p pil= Masukkan Pilihan Anda [1-4] :
 
 if "%pil%"=="1" goto RunCheck
-if "%pil%"=="2" goto RunGUI
+if "%pil%"=="2" goto RunCheck
 if "%pil%"=="3" goto InstallReq
 if "%pil%"=="4" goto Exit
 goto MainMenu
@@ -46,8 +46,6 @@ if %errorlevel% neq 0 (
     echo Python is ready!
     echo.
     goto InstallReqAndRun
-) else (
-    goto SelectMode
 )
 
 :SelectMode
@@ -126,6 +124,6 @@ goto MainMenu
 :Exit
 cls
 echo.
-echo Terima kasih sudah menggunakan script ini 💕
+echo Thank you for using this script 💕
 timeout /t 2 >nul
 exit
