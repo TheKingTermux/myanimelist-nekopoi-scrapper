@@ -78,6 +78,7 @@
   - Support for 9 languages: Indonesian, English, Japanese, Spanish, Chinese, Korean, French, German, Portuguese
   - Dynamic language switching in GUI
   - Extensible translation framework
+  - Header templates for MAL, both, and Nekopoi sources in all supported languages
 - Multi-Format Export: Support for JSON, CSV, and PDF outputs
 - Enhanced Error Handling: Retry logic with exponential backoff
 - Proxy Support: Optional proxy configuration for anti-bot measures
@@ -87,6 +88,7 @@
 - Enhanced scraping functions with retry and proxy parameters
 - Updated dependencies in `requirements.txt`
 - Improved documentation with GUI usage examples
+- Modified `Start.bat` startup flow: All users (CLI and GUI) now must go through Python check and requirements installation before mode selection
 
 ### Technical Improvements
 - Modular code structure with separate GUI components
