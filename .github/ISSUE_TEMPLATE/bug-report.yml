@@ -1,6 +1,6 @@
 name: 🐞 Bug Report
 description: Report a bug or issue in the codebase
-labels: [bug, needs investigation]
+labels: [Bug, Needs Investigation]
 assignees: [TheKingTermux]
 
 body:
