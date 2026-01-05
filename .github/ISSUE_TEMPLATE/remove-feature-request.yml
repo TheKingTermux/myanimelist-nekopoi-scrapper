@@ -1,6 +1,6 @@
 name: ❌ Remove Feature Request
 description: Request to remove or deprecate an existing feature
-labels: [feature removal, maintenance]
+labels: [Feature Removal, Maintenance]
 assignees: [TheKingTermux]
 
 body:
