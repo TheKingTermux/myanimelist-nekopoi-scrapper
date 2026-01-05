@@ -1,6 +1,6 @@
 name: 🧩 Improve Code / Refactor Request
 description: Suggest improvements or refactors for existing code
-labels: [refactor, improvement]
+labels: [Refactor, Improvement]
 assignees: [TheKingTermux]
 
 body:
