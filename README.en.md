@@ -4,7 +4,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.13.3-blue?logo=python)](https://www.python.org/)
 ![GitHub Release](https://img.shields.io/github/v/release/TheKingTermux/myanimelist-nekopoi-scrapper)
-[![Made with ❤️](https://img.shields.io/badge/Dibuat%20dengan-%E2%9D%A4-red)]()
+[![Made with ❤️](https://img.shields.io/badge/Created%20with-%E2%9D%A4-red)]()
 
 > Automated scraper to collect data from MyAnimeList & Nekopoi, built in Python + Requests + BeautifulSoup.
 >
@@ -27,16 +27,16 @@
 ## 📂 Project Structure
 ```
 ├── LICENSE # License
-├── MyAnimeList_and_Nekopoi_Scrapper.py # Main script (Indonesian version)
+├── MyAnimeList_and_Nekopoi_Scrapper.py         # Main script (Indonesian version)
 ├── MyAnimeList_and_Nekopoi_Scrapper_English.py # Main script (English version)
-├── gui_scraper.py # Desktop GUI with Tkinter (multi-language support)
-├── localization.py # Code for multi-language support
-├── requirements.txt # Dependencies
-├── Start.bat # Batch file (installer + runner)
-├── AnimeList/ # Output folder Scraping
-├── data_usage.txt # Data usage tracking
-├── README.md and README.en.md # Project documentation
-└── CHANGELOG.md # Version changelog
+├── gui_scraper.py                              # Desktop GUI with Tkinter (multi-language support)
+├── localization.py                             # Code for multi-language support
+├── requirements.txt                            # Dependencies
+├── Start.bat                                   # Batch file (installer + runner)
+├── AnimeList/                                  # Output folder Scraping
+├── data_usage.txt                              # Data usage tracking
+├── README.md and README.en.md                  # Project documentation
+└── CHANGELOG.md                                # Version changelog
 ```
 
 ## 🛠️ How to Use
