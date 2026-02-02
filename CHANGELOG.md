@@ -26,7 +26,7 @@
 ### Fixed
 - N/A (initial release)
 
-## [11.1] - 2025-09-16
+## [11.1] - 2025-09-30
 
 ### Added
 - Script source
