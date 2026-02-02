@@ -266,7 +266,7 @@ def scrape_nekopoi(max_retries=3, use_proxy=False, proxy_list=None):
                     })
 
             # Dapatkan tanggal update terakhir
-            last_update_tag = soup.select_one('#content > div.postsbody > div > div.contentpost > p:nth-child(14) > span > em > strong')
+            last_update_tag = soup.select_one('#content > div.postsbody > div > div.contentpost > p > span > em > strong')
             last_update = "Unknown"
             if last_update_tag:
                 last_update_text = last_update_tag.get_text(strip=True)
@@ -418,6 +418,19 @@ def scrape_mal_seasonal(url, max_retries=3, use_proxy=False, proxy_list=None):
             # Cetak pesan kategori
             for msg in log_messages:
                 logging.info(msg)
+                
+            hentai_count = 0
+            erotica_count = 0
+            for date, animes in anime_data.items():
+                for anime in animes:
+                    genres = anime.get('genres', [])
+                    if 'Hentai' in genres:
+                        hentai_count += 1
+                    if 'Erotica' in genres:
+                        erotica_count += 1
+
+            print(f"🔍 Ditemukan {hentai_count} entri anime untuk Hentai")
+            print(f"🔍 Ditemukan {erotica_count} entri anime untuk Erotica")
 
             # Hentikan animasi loading
             loading_active = False
@@ -443,41 +456,56 @@ def scrape_mal_seasonal(url, max_retries=3, use_proxy=False, proxy_list=None):
 
 def save_to_file(anime_data, categories, output_path, member_threshold=10000, nekopoi_data=None, nekopoi_last_update="Unknown", filter_year=2025, season_name="Unknown", year="2025"):
     """Menyimpan data anime ke dalam file."""
-    # Hitung bulan nekopoi secara dinamis berdasarkan data yang diambil
-    current_month = datetime.now().month  # Bulan saat ini
-    months_in_nekopoi = set()  # Set untuk menyimpan bulan unik dari data nekopoi
-    if nekopoi_data:
-        # Peta nama bulan Indonesia ke angka
+
+    def parse_indo_date(date_str):
+        """Mengurai format tanggal Indonesia seperti '27 Juni 2025' ke datetime untuk pengurutan"""
         month_map = {
             'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
             'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
         }
-        # Ekstrak bulan dari setiap tanggal di data nekopoi
-        for date in nekopoi_data.keys():
-            parts = date.split()
-            if len(parts) >= 3:
-                month_str = parts[1]  # Nama bulan (misalnya 'Juni')
-                month = month_map.get(month_str)
-                if month:
-                    months_in_nekopoi.add(month)  # Tambahkan bulan ke set
+        parts = date_str.split()
+        if len(parts) == 3:
+            day = int(parts[0])
+            month = month_map.get(parts[1], 1)
+            year = int(parts[2])
+            return datetime(year, month, day)
+        return datetime.now()  # fallback
 
-    # Jumlah bulan unik di nekopoi, default 2 jika tidak ada data
-    nekopoi_month = len(months_in_nekopoi) if months_in_nekopoi else 2
-    if months_in_nekopoi:
-        first_month = min(months_in_nekopoi)  # Bulan pertama di data
-        last_month = max(months_in_nekopoi)   # Bulan terakhir di data
-        # Bulan yang telah berlalu: dari bulan pertama hingga bulan sebelum saat ini
-        month_has_passed = current_month - first_month
-        # Bulan ke depan: bulan setelah bulan saat ini hingga bulan terakhir
-        month_ahead = last_month - current_month
-        # Tentukan teks untuk bulan ke depan
-        if month_ahead <= 0:
-            ahead_text = "dan bulan terakhir adalah bulan ini"
+    # Hitung jumlah bulan nekopoi dari data yang di-scrape
+    if nekopoi_data:
+        unique_months = set()
+        for date in nekopoi_data.keys():
+            dt = parse_indo_date(date)
+            unique_months.add((dt.year, dt.month))
+        if unique_months:
+            first_ym = min(unique_months)
+            last_ym = max(unique_months)
+            current = datetime.now()
+            current_ym = (current.year, current.month)
+            def months_diff(ym1, ym2):
+                y1, m1 = ym1
+                y2, m2 = ym2
+                return (y2 - y1) * 12 + (m2 - m1)
+            nekopoi_month = months_diff(first_ym, last_ym) + 1
+            month_has_passed = months_diff(first_ym, current_ym)
+            # Dapatkan nama bulan terakhir dalam bahasa Indonesia
+            last_month_english = datetime(last_ym[0], last_ym[1], 1).strftime('%B')
+            last_month = translate_month(last_month_english)  # Menggunakan fungsi translate_month yang ada
+            # Tentukan teks jadwal berdasarkan apakah month_has_passed masuk akal
+            if month_has_passed >= 0:
+                schedule_info = f"(dengan {month_has_passed} bulan telah berlalu, dan bulan terakhir adalah {last_month})"
+            else:
+                schedule_info = f"(dan bulan terakhir adalah {last_month})"
         else:
-            ahead_text = f"{month_ahead} bulan ke depan"
+            nekopoi_month = 0
+            month_has_passed = 0
+            last_month = "Tidak diketahui"
+            schedule_info = f"(dan bulan terakhir adalah {last_month})"
     else:
+        nekopoi_month = 0
         month_has_passed = 0
-        ahead_text = "tidak ada data"
+        last_month = "Tidak diketahui"
+        schedule_info = f"(dan bulan terakhir adalah {last_month})"
 
     # cspell:disable-next-line
     header_template = """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
@@ -485,7 +513,7 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
 𝙼𝚎𝚖𝚋𝚎𝚛 : {member}
 
 Latest Information :
-Inget : Anime Hentai yg w ambil ada 2 sumber, yg pastinya syudah jelas mana yg bakal up dluan :v jdi w pisahin list nya biar gk bingung. Ohh iya di list punya ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 jadwalnya cuma {nekopoi_month} bulan (dengan {month_has_passed} bulan telah berlalu, {ahead_text})
+Inget : Anime Hentai yg w ambil ada 2 sumber, yg pastinya syudah jelas mana yg bakal up dluan :v jdi w pisahin list nya biar gk bingung. Ohh iya di list punya ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 jadwalnya cuma {nekopoi_month} bulan {schedule_info}
 
 Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
 - Tanggal Rilis
@@ -549,7 +577,7 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
     fancy_member = ''.join(number_mapping.get(char, char) for char in str(member_threshold))
 
     # Ganti placeholder di header
-    header = header_template.replace("{season}", fancy_season).replace("{year}", fancy_year).replace("{member}", fancy_member).replace("{nekopoi_month}", str(nekopoi_month)).replace("{month_has_passed}", str(month_has_passed)).replace("{ahead_text}", ahead_text)
+    header = header_template.replace("{season}", fancy_season).replace("{year}", fancy_year).replace("{member}", fancy_member).replace("{nekopoi_month}", str(nekopoi_month)).replace("{schedule_info}", schedule_info)
 
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(header)
@@ -561,20 +589,6 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
             f.write("=" * 50 + "\n")
 
             # Urutkan tanggal secara kronologis
-            def parse_indo_date(date_str):
-                """Mengurai format tanggal Indonesia seperti '27 Juni 2025' ke datetime untuk pengurutan"""
-                month_map = {
-                    'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
-                    'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
-                }
-                parts = date_str.split()
-                if len(parts) == 3:
-                    day = int(parts[0])
-                    month = month_map.get(parts[1], 1)
-                    year = int(parts[2])
-                    return datetime(year, month, day)
-                return datetime.now()  # fallback
-
             sorted_dates = sorted(nekopoi_data.keys(), key=parse_indo_date)
 
             for date in sorted_dates:
@@ -738,7 +752,7 @@ def tampilkan_header():
     """Menampilkan header program"""
     logging.info("="*65)
     logging.info("               MyAnimeList dan NekoPoi SCRAPPER")
-    logging.info("                   VERSI 13 - TheKingTermux")
+    logging.info("                   VERSI 14 - TheKingTermux")
     logging.info("="*65)
     logging.info(" Script ini akan mengambil data anime seasonal dari MyAnimeList")
     logging.info(" Normal maupun Hentai dan akan mengambil data anime Hentai dari")
