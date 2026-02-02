@@ -39,7 +39,7 @@
 - Change EN Main Script to same as ID Main Script
 - Change Phrase
 
-## [12] - 2025-09-16
+## [12] - 2025-10-13
 
 ### Added
 - Added global data_usage and session_data_usage variables.
