@@ -57,11 +57,12 @@ class Localization:
             'scrape_nekopoi_option': 'Nekopoi',
             'scrape_both_option': 'Keduanya',
             'header_template_both': """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
-            {year}
+{year}
 𝙼𝚎𝚖𝚋𝚎𝚛 : {member}
 
 Latest Information :
-Inget : Anime Hentai yg w ambil ada 2 sumber, yg pastinya syudah jelas mana yg bakal up dluan :v jdi w pisahin list nya biar gk bingung. Ohh iya di list punya ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 jadwalnya cuma {nekopoi_month} bulan (dengan {month_has_passed} bulan telah berlalu, {ahead_text})
+Inget : Anime Hentai yg w ambil ada 2 sumber, yg pastinya syudah jelas mana yg bakal up dluan :v jdi w pisahin list nya biar gk bingung.
+Ohh iya di list punya ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 jadwalnya cuma {nekopoi_month} bulan {schedule_info}
 
 Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
 - Tanggal Rilis
@@ -104,8 +105,9 @@ Intinya w ambil yg menurut w menarik ae :v
 Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
 Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
-            {year}
+
+'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
+{year}
 𝙼𝚎𝚖𝚋𝚎𝚛 : {member}
 
 Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
@@ -136,15 +138,17 @@ Info tambahan :
 Kalau di akhiran genre dipisah dan dibelakang genrenya ada tanda ! (tanda seru) + cetak tebal artinya awas ae soalnya genrenya dah aneh / nyeleweng dan biasanya genre itu masuk di "Danger Anime Genre", jdi usahakan dibaca dlu dan dipahami baek" soalnya klo ada apa" bukan salah Admin / yg share rekomendasi klo ente masih tetep nonton tu anime yg ada genre bahaya 🙂
 
 Disclaimer :
-Semua Normal Anime list dan  Hentai Anime List diambil dari ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞
+Semua Normal Anime list dan Hentai Anime List diambil dari ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞
 
 Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
 Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 𝙷𝚎𝚗𝚝𝚊𝚒  𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
-            {first_month - last_month} {year}
+
+'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
+{year}
+
 Latest Information :
-Jadwal ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 cuma {nekopoi_month} bulan (dengan {month_has_passed} bulan telah berlalu, {ahead_text})
+Jadwal ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 cuma {nekopoi_month} bulan {schedule_info}
 
 Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 Anime list :
 - Tanggal Rilis
@@ -165,7 +169,8 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
             'none_text': "_*TIDAK ADA*_\n\n",
             'scrape_mal_option': 'MyAnimeList',
             'scrape_nekopoi_option': 'Nekopoi',
-            'scrape_both_option': 'Keduanya'
+            'scrape_both_option': 'Keduanya',
+            'language_change_message': 'Anda sekarang menggunakan bahasa {lang_now} dan akan berganti ke bahasa {lang_targeted}, silahkan muat ulang'
         }
 
         # English translations
@@ -210,93 +215,99 @@ Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
             'mal_scrape_failed': 'MyAnimeList scraping failed or returned no data',
             'nekopoi_scrape_failed': 'Nekopoi scraping failed or returned no data',
             'data_usage_label': 'Data Usage:',
-            'header_template_both': """{season} 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
-            {year}
-  Member : {member}
+            'header_template_both': """{season} Hentai And Normal Anime List
+{year}
+Member : {member}
 
-  Latest Information :
-  Note : The hentai anime I take comes from 2 sources, which clearly show which one will be released first :v so I separate the list so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 list is only {nekopoi_month} months (with {month_has_passed} months have passed, {ahead_text})
-
-  Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
-  - Release Date
-  > Hentai Title
-  ^ Studio
-  ! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
-  + Number of Episodes (if available)
-  ~ Minutes per Episode (if available)
-
-  Common Information for Hentai ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 Anime list :
-  - Release Date
-  > Hentai Title
-  ^ Studio
-  ! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
-  + Episodes to be released (Meaning which episode will be released on this date in ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒)
-
-  Common Information for Normal Anime list :
-  - Release Date
-  > Anime Title
-  ! Anime Genre
-  + Number of Episodes (if available)
-  ~ Minutes per Episode (if available)
-
-  Danger Anime Genre:
-  Adl : Adult
-  BL / Yao : Boys Love / Yaoi
-  Cro : Crossdressing
-  Ecc : Ecchi
-  Ero : Erotica
-  GL / Yur : Girls Love / Yuri
-  Hen : Hentai
-
-  Additional Info :
-  If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read first and understand well" so that if there is something wrong it's not the fault of the Admin / recommender if you still watch that dangerous genre anime 🙂
-
-  Disclaimer :
-  All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears I write :v
-  Basically I take what I think is interesting :v
-
-  Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
-\n\n""",
-            'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 𝙷𝚎𝚗𝚝𝚊𝚒 𝙰𝚗𝚍 𝙽𝚘𝚛𝚖𝚊𝚕 𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
-            {year}
-  Member : {member}
-
-  Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
-  - Release Date
-  > Hentai Title
-  ^ Studio
-  ! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
-  + Number of Episodes (if available)
-  ~ Minutes per Episode (if available)
-
-  Common Information for Normal Anime list :
-  - Release Date
-  > Anime Title
-  ! Anime Genre
-  + Number of Episodes (if available)
-  ~ Minutes per Episode (if available)
-
-  Danger Anime Genre:
-  Adl : Adult
-  BL / Yao : Boys Love / Yaoi
-  Cro : Crossdressing
-  Ecc : Ecchi
-  Ero : Erotica
-  GL / Yur : Girls Love / Yuri
-  Hen : Hentai
-
-  Additional Info :
-  If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read first and understand well" so that if there is something wrong it's not the fault of the Admin / recommender if you still watch that dangerous genre anime 🙂
-
-  Disclaimer :
-  All Normal Anime list and Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞
-
-  Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
-\n\n""",
-            'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 𝙷𝚎𝚗𝚝𝚊𝚒  𝙰𝚗𝚒𝚖𝚎 𝙻𝚒𝚜𝚝
-            {first_month - last_month} {year}
 Latest Information :
-Schedule ©KucingPeduli is only {nekopoi_month} months (with {month_has_passed} months have passed, {ahead_text})
+Note : The hentai anime I take comes from 2 sources, which clearly show which one will be released first :v so I separate the list so you don't get confused.
+Oh yeah, the schedule in ©KucingPeduli list is only {nekopoi_month} months {schedule_info}
+
+Common Information for Hentai ©ListAnimeKu Anime list :
+- Release Date
+> Hentai Title
+^ Studio
+! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
++ Number of Episodes (if available)
+~ Minutes per Episode (if available)
+
+Common Information for Hentai ©KucingPeduli Anime list :
+- Release Date
+> Hentai Title
+^ Studio
+! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
++ Episodes to be released (Meaning which episode will be released on this date in ©KucingPeduli)
+
+Common Information for Normal Anime list :
+- Release Date
+> Anime Title
+! Anime Genre
++ Number of Episodes (if available)
+~ Minutes per Episode (if available)
+
+Danger Anime Genre:
+Adl : Adult
+BL / Yao : Boys Love / Yaoi
+Cro : Crossdressing
+Ecc : Ecchi
+Ero : Erotica
+GL / Yur : Girls Love / Yuri
+Hen : Hentai
+
+Additional Info :
+If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read first and understand well so that if there is something wrong it's not the fault of the Admin / recommender if you still watch that dangerous genre anime 🙂
+
+Disclaimer :
+All Normal Anime list and Some Hentai Anime List are taken from ©ListAnimeKu and Some Hentai Anime List is taken from ©KucingPeduli not all anime that appears I write :v
+Basically I take what I think is interesting :v
+
+Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
+\n\n""",
+
+'header_template_mal': """MyAnimeList Hentai And Normal Anime List
+{year}
+Member : {member}
+
+Common Information for Hentai ©ListAnimeKu Anime list :
+- Release Date
+> Hentai Title
+^ Studio
+! Hentai Genre (ABSOLUTELY SECRET) Because I don't know the genre :v
++ Number of Episodes (if available)
+~ Minutes per Episode (if available)
+
+Common Information for Normal Anime list :
+- Release Date
+> Anime Title
+! Anime Genre
++ Number of Episodes (if available)
+~ Minutes per Episode (if available)
+
+Danger Anime Genre:
+Adl : Adult
+BL / Yao : Boys Love / Yaoi
+Cro : Crossdressing
+Ecc : Ecchi
+Ero : Erotica
+GL / Yur : Girls Love / Yuri
+Hen : Hentai
+
+Additional Info :
+If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read first and understand well so that if there is something wrong it's not the fault of the Admin / recommender if you still watch that dangerous genre anime 🙂
+
+Disclaimer :
+All Normal Anime list and Hentai Anime List are taken from ©ListAnimeKu
+
+Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
+\n\n""",
+
+'header_template_nekopoi': """Nekopoi Hentai Anime List
+{year}
+
+Latest Information :
+Schedule ©KucingPeduli is only {nekopoi_month} months {schedule_info}
 
 Common Information for Hentai ©KucingPeduli Anime list :
 - Release Date
@@ -306,6 +317,7 @@ Common Information for Hentai ©KucingPeduli Anime list :
 + Episodes to be released (Meaning which episode will be released on this date in ©KucingPeduli)
 
 Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
             'note_text': "NOTE : Schedule may not be complete, please wait for admin update\n",
             'last_update_text': "Last Update : {nekopoi_last_update}\n\n",
@@ -316,7 +328,8 @@ Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
             'none_text': "_*NONE*_\n\n",
             'scrape_mal_option': 'MyAnimeList',
             'scrape_nekopoi_option': 'Nekopoi',
-            'scrape_both_option': 'Les deux'
+            'scrape_both_option': 'Les deux',
+            'language_change_message': 'You are currently using {lang_now} and will switch to {lang_targeted}, please reload'
         }
 
         # Japanese translations
@@ -365,11 +378,12 @@ Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
             'scrape_nekopoi_option': 'Nekopoi',
             'scrape_both_option': '両方',
             'header_template_both': """{season} ヘンタイとノーマルアニメリスト
-            {year}
+{year}
 メンバー : {member}
 
 最新情報 :
-注意 : 私が取るヘンタイアニメは2つのソースから来ており、どちらが先にリリースされるかを明確に示しています :v だから混乱しないようにリストを分けます。ああ、そうだ、©KucingPeduli リストのスケジュールは {nekopoi_month} ヶ月だけ ( {month_has_passed} ヶ月が経過, {ahead_text})
+注意 : 私が取るヘンタイアニメは2つのソースから来ており、どちらが先にリリースされるかを明確に示しています :v だから混乱しないようにリストを分けます。
+ああ、そうだ、©KucingPeduli リストのスケジュールは {nekopoi_month} ヶ月だけ {schedule_info}
 
 ヘンタイ ©ListAnimeKu アニメリストの共通情報 :
 - リリース日
@@ -410,8 +424,10 @@ Hen : ヘンタイ
 基本的に私が面白いと思うものを取ります :v
 
 ツール : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 ヘンタイとノーマルアニメリスト
+
+'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 ヘンタイとノーマルアニメリスト
 {year}
 メンバー : {member}
 
@@ -443,14 +459,17 @@ Hen : ヘンタイ
 ジャンルの終わりが分離されていて、ジャンルの後ろに ! (感嘆符) + 太字がある場合、それは注意を意味します。なぜならジャンルはすでに奇妙 / 変態的で、通常 "Danger Anime Genre" に入るからです、だからまず読んでよく理解してください" 何か問題があればそれが危険なジャンルアニメを見続ける場合の管理者 / 推薦者の責任ではありません 🙂
 
 免責事項 :
-すべてのノーマルアニメリストと ヘンタイアニメリストは ©ListAnimeKuから
+すべてのノーマルアニメリストとヘンタイアニメリストは ©ListAnimeKu から
 
 ツール : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 ヘンタイ アニメリスト
-{first_month - last_month} {year}
+
+'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 ヘンタイ アニメリスト
+{year}
+
 最新情報 :
-©KucingPeduli のスケジュールは {nekopoi_month} ヶ月だけ ( {month_has_passed} ヶ月が経過, {ahead_text})
+©KucingPeduli のスケジュールは {nekopoi_month} ヶ月だけ {schedule_info}
 
 ヘンタイ ©KucingPeduli アニメリストの共通情報 :
 - リリース日
@@ -460,6 +479,7 @@ Hen : ヘンタイ
 + リリースされるエピソード (この日に ©KucingPeduli でリリースされるエピソードの意味)
 
 ツール : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
             'note_text': "注意 : スケジュールが完全でない可能性があります、管理者の更新をお待ちください\n",
             'last_update_text': "最終更新 : {nekopoi_last_update}\n\n",
@@ -467,7 +487,8 @@ Hen : ヘンタイ
             'hentai_list_title': "*ヘンタイアニメリスト ©ListAnimeKu*\n",
             'erotica_list_title': "*エロティカアニメリスト ©ListAnimeKu*\n",
             'normal_list_title': "*ノーマルアニメリスト*\n",
-            'none_text': "_*なし*_\n\n"
+            'none_text': "_*なし*_\n\n",
+            'language_change_message': '現在 {lang_now} を使用しており、 {lang_targeted} に切り替わります。リロードしてください'
         }
 
         # Spanish translations
@@ -516,12 +537,12 @@ Hen : ヘンタイ
             'scrape_nekopoi_option': 'Nekopoi',
             'scrape_both_option': 'Ambos',
             'header_template_both': """{season} Lista de Anime Hentai y Normal
-
 {year}
 Miembro : {member}
 
 Última Información :
-Nota : Los animes hentai que tomo provienen de 2 fuentes, que claramente muestran cuál se lanzará primero :v así que separo la lista para no confundirte. Ah sí, el horario en la lista de ©KucingPeduli es solo {nekopoi_month} meses (con {month_has_passed} meses transcurridos, {ahead_text})
+Nota : Los animes hentai que tomo provienen de 2 fuentes, que claramente muestran cuál se lanzará primero :v así que separo la lista para no confundirte.
+Oh sí, el horario en la lista ©KucingPeduli es solo {nekopoi_month} meses {schedule_info}
 
 Información Común para la lista de Anime Hentai ©ListAnimeKu :
 - Fecha de Lanzamiento
@@ -555,15 +576,17 @@ GL / Yur : Girls Love / Yuri
 Hen : Hentai
 
 Información Adicional :
-Si al final del género está separado y detrás del género hay un signo ! (signo de exclamación) + negrita, significa cuidado porque el género ya es raro / pervertido y usualmente entra en "Danger Anime Genre", so try to read first and understand well" para que si hay algo mal no sea culpa del Admin / recomendador si sigues viendo ese anime de género peligroso 🙂
+Si al final del género está separado y detrás del género hay un signo ! (signo de exclamación) + negrita, significa cuidado porque el género ya es raro / pervertido y usualmente entra en "Danger Anime Genre", so try to read first and understand well para que si hay algo mal no sea culpa del Admin / recomendador si sigues viendo ese anime de género peligroso 🙂
 
 Descargo de Responsabilidad :
 Todas las listas de Anime Normal y Algunas Listas de Anime Hentai se toman de ©ListAnimeKu y Algunas Listas de Anime Hentai se toman de ©KucingPeduli no escribo todos los animes que aparecen :v
 Básicamente tomo lo que pienso que es interesante :v
 
 Herramientas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 Lista de Anime Hentai y Normal
+
+'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 Lista de Anime Hentai y Normal
 {year}
 Miembro : {member}
 
@@ -592,17 +615,20 @@ GL / Yur : Girls Love / Yuri
 Hen : Hentai
 
 Información Adicional :
-Si al final del género está separado y detrás del género hay un signo ! (signo de exclamación) + negrita, significa cuidado porque el género ya es raro / pervertido y normalmente entra en "Danger Anime Genre", so try to read first and understand well" para que si hay algo mal no sea culpa del Admin / recomendador si sigues viendo ese anime de género peligroso 🙂
+Si al final del género está separado y detrás del género hay un signo ! (signo de exclamación) + negrita, significa cuidado porque el género ya es raro / pervertido y usualmente entra en "Danger Anime Genre", so try to read first and understand well para que si hay algo mal no sea culpa del Admin / recomendador si sigues viendo ese anime de género peligroso 🙂
 
 Descargo de Responsabilidad :
 Todas las listas de Anime Normal y Hentai Anime List son tomadas de ©ListAnimeKu
 
 Herramientas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 Lista de Anime Hentai
-{first_month - last_month} {year}
+
+'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 Lista de Anime Hentai
+{year}
+
 Última Información :
-El horario en la lista ©KucingPeduli es solo {nekopoi_month} meses (con {month_has_passed} meses transcurridos, {ahead_text})
+El horario en la lista ©KucingPeduli es solo {nekopoi_month} meses {schedule_info}
 
 Información Común para la lista de Anime Hentai ©KucingPeduli :
 - Fecha de Lanzamiento
@@ -612,6 +638,7 @@ Información Común para la lista de Anime Hentai ©KucingPeduli :
 + Episodios a lanzarse (Significado cuál episodio se lanzará en esta fecha en ©KucingPeduli)
 
 Herramientas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
             'note_text': "NOTA : El horario puede no estar completo, por favor espera la actualización del admin\n",
             'last_update_text': "Última Actualización : {nekopoi_last_update}\n\n",
@@ -619,7 +646,8 @@ Herramientas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
             'hentai_list_title': "*Lista de Anime Hentai ©ListAnimeKu*\n",
             'erotica_list_title': "*Lista de Anime Erótica ©ListAnimeKu*\n",
             'normal_list_title': "*Lista de Anime Normal*\n",
-            'none_text': "_*NINGUNO*_\n\n"
+            'none_text': "_*NINGUNO*_\n\n",
+            'language_change_message': 'Actualmente estás usando {lang_now} y cambiarás a {lang_targeted}, por favor recarga'
         }
 
         # Chinese (Simplified) translations
@@ -668,12 +696,12 @@ Herramientas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
             'scrape_nekopoi_option': 'Nekopoi',
             'scrape_both_option': '两者',
             'header_template_both': """{season} 变态和正常动漫列表
-
 {year}
 成员 : {member}
 
 最新信息 :
-注意 : 我拿的变态动漫来自2个来源，它们清楚地显示哪个会先发布 :v 所以我分开列表以免你困惑。哦对了，©KucingPeduli 列表的日程只有 {nekopoi_month} 个月 (已过去 {month_has_passed} 个月, {ahead_text})
+注意 : 我拿的变态动漫来自2个来源，它们清楚地显示哪个会先发布 :v 所以我分开列表以免你困惑。
+哦对了，©KucingPeduli 列表的日程只有 {nekopoi_month} 个月 {schedule_info}
 
 变态动漫 ©ListAnimeKu 动漫列表的常见信息 :
 - 发布日期
@@ -714,8 +742,10 @@ Hen : Hentai
 基本上我拿我觉得有趣的 :v
 
 工具 : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 变态和正常动漫列表
+
+'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 变态和正常动漫列表
 {year}
 成员 : {member}
 
@@ -750,11 +780,14 @@ Hen : Hentai
 所有正常动漫列表和变态动漫列表取自 ©ListAnimeKu
 
 工具 : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 变态动漫列表
-{first_month - last_month} {year}
+
+'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 变态动漫列表
+{year}
+
 最新信息 :
-©KucingPeduli 列表的日程只有 {nekopoi_month} 个月 (已过去 {month_has_passed} 个月, {ahead_text})
+©KucingPeduli 列表的日程只有 {nekopoi_month} 个月 {schedule_info}
 
 变态动漫 ©KucingPeduli 动漫列表的常见信息 :
 - 发布日期
@@ -764,6 +797,7 @@ Hen : Hentai
 + 要发布的集数 (意思是这一天在 ©KucingPeduli 要发布的集数)
 
 工具 : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
             'note_text': "注意 : 日程可能不完整，请等待管理员更新\n",
             'last_update_text': "最后更新 : {nekopoi_last_update}\n\n",
@@ -771,7 +805,8 @@ Hen : Hentai
             'hentai_list_title': "*变态动漫列表 ©ListAnimeKu*\n",
             'erotica_list_title': "*色情动漫列表 ©ListAnimeKu*\n",
             'normal_list_title': "*正常动漫列表*\n",
-            'none_text': "_*无*_\n\n"
+            'none_text': "_*无*_\n\n",
+            'language_change_message': '您当前正在使用 {lang_now} 并将切换到 {lang_targeted}，请重新加载'
         }
 
         # Korean translations
@@ -820,12 +855,12 @@ Hen : Hentai
             'scrape_nekopoi_option': 'Nekopoi',
             'scrape_both_option': '둘 다',
             'header_template_both': """{season} 헨타이와 일반 애니메이션 목록
-
 {year}
 회원 : {member}
 
 최신 정보 :
-참고 : 내가 가져오는 헨타이 애니메이션은 2개의 소스에서 나오며, 어느 것이 먼저 출시될지 명확히 보여줍니다 :v 그래서 혼동되지 않도록 목록을 분리합니다. 아 맞아, ©KucingPeduli 목록의 일정은 {nekopoi_month}개월만 ( {month_has_passed}개월이 지났음, {ahead_text})
+참고 : 내가 가져오는 헨타이 애니메이션은 2개의 소스에서 나오며, 어느 것이 먼저 출시될지 명확히 보여줍니다 :v 그래서 혼동되지 않도록 목록을 분리합니다.
+아 맞아, ©KucingPeduli 목록의 일정은 {nekopoi_month}개월만 {schedule_info}
 
 헨타이 ©ListAnimeKu 애니메이션 목록의 공통 정보 :
 - 출시 날짜
@@ -866,8 +901,10 @@ Hen : Hentai
 기본적으로 내가 흥미롭다고 생각하는 것을 가져옵니다 :v
 
 도구 : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 헨타이와 일반 애니메이션 목록
+
+'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 헨타이와 일반 애니메이션 목록
 {year}
 회원 : {member}
 
@@ -902,11 +939,14 @@ Hen : Hentai
 모든 일반 애니메이션 목록과 헨타이 애니메이션 목록은 ©ListAnimeKu에서 가져옵니다
 
 도구 : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 헨타이 애니메이션 목록
-{first_month - last_month} {year}
+
+'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 헨타이 애니메이션 목록
+{year}
+
 최신 정보 :
-©KucingPeduli 목록의 일정은 {nekopoi_month}개월만 ( {month_has_passed}개월이 지났음, {ahead_text})
+©KucingPeduli 목록의 일정은 {nekopoi_month}개월만 {schedule_info}
 
 헨타이 ©KucingPeduli 애니메이션 목록의 공통 정보 :
 - 출시 날짜
@@ -916,6 +956,7 @@ Hen : Hentai
 + 출시될 에피소드 (이 날짜에 ©KucingPeduli에서 출시될 에피소드 의미)
 
 도구 : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
             'note_text': "참고 : 일정이 완전하지 않을 수 있습니다, 관리자 업데이트를 기다려주세요\n",
             'last_update_text': "마지막 업데이트 : {nekopoi_last_update}\n\n",
@@ -923,7 +964,8 @@ Hen : Hentai
             'hentai_list_title': "*헨타이 애니메이션 목록 ©ListAnimeKu*\n",
             'erotica_list_title': "*에로티카 애니메이션 목록 ©ListAnimeKu*\n",
             'normal_list_title': "*일반 애니메이션 목록*\n",
-            'none_text': "_*없음*_\n\n"
+            'none_text': "_*없음*_\n\n",
+            'language_change_message': '현재 {lang_now}을(를) 사용하고 있으며 {lang_targeted}(으)로 전환됩니다. 다시 로드하십시오'
         }
 
         # French translations
@@ -969,109 +1011,117 @@ Hen : Hentai
             'nekopoi_scrape_failed': 'Le scraping Nekopoi a échoué ou n\'a pas retourné de données',
             'data_usage_label': 'Utilisation des Données:',
             'header_template_both': """{season} Liste d'Anime Hentai et Normal
-            {year}
- Membre : {member}
+{year}
+Membre : {member}
 
- Dernières Informations :
- Note : Les animes hentai que je prends viennent de 2 sources, qui montrent clairement lequel sera publié en premier :v alors je sépare la liste pour ne pas te confondre. Ah oui, le calendrier dans la liste ©KucingPeduli est seulement {nekopoi_month} mois (avec {month_has_passed} mois passés, {ahead_text})
+Dernières Informations :
+Note : Les animes hentai que je prends viennent de 2 sources, qui montrent clairement lequel sera publié en premier :v alors je sépare la liste pour ne pas te confondre.
+Ah oui, le calendrier dans la liste ©KucingPeduli est seulement {nekopoi_month} mois {schedule_info}
 
- Informations Communes pour la liste d'Anime Hentai ©ListAnimeKu :
- - Date de Sortie
- > Titre Hentai
- ^ Studio
- ! Genre Hentai (ABSOLUMENT SECRET) Parce que je ne connais pas le genre :v
- + Nombre d'Épisodes (si disponible)
- ~ Minutes par Épisode (si disponible)
+Informations Communes pour la liste d'Anime Hentai ©ListAnimeKu :
+- Date de Sortie
+> Titre Hentai
+^ Studio
+! Genre Hentai (ABSOLUMENT SECRET) Parce que je ne connais pas le genre :v
++ Nombre d'Épisodes (si disponible)
+~ Minutes par Épisode (si disponible)
 
- Informations Communes pour la liste d'Anime Hentai ©KucingPeduli :
- - Date de Sortie
- > Titre Hentai
- ^ Studio
- ! Genre Hentai (ABSOLUMENT SECRET) Parce que je ne connais pas le genre :v
- + Épisodes à sortir (Signifiant quel épisode sera sorti à cette date dans ©KucingPeduli)
+Informations Communes pour la liste d'Anime Hentai ©KucingPeduli :
+- Date de Sortie
+> Titre Hentai
+^ Studio
+! Genre Hentai (ABSOLUMENT SECRET) Parce que je ne connais pas le genre :v
++ Épisodes à sortir (Signifiant quel épisode sera sorti à cette date dans ©KucingPeduli)
 
- Informations Communes pour la liste d'Anime Normal :
- - Date de Sortie
- > Titre Anime
- ! Genre Anime
- + Nombre d'Épisodes (si disponible)
- ~ Minutes par Épisode (si disponible)
+Informations Communes pour la liste d'Anime Normal :
+- Date de Sortie
+> Titre Anime
+! Genre Anime
++ Nombre d'Épisodes (si disponible)
+~ Minutes par Épisode (si disponible)
 
- Genre d'Anime Dangereux:
- Adl : Adulte
- BL / Yao : Boys Love / Yaoi
- Cro : Crossdressing
- Ecc : Ecchi
- Ero : Erotica
- GL / Yur : Girls Love / Yuri
- Hen : Hentai
+Genre d'Anime Dangereux :
+Adl : Adulte
+BL / Yao : Boys Love / Yaoi
+Cro : Crossdressing
+Ecc : Ecchi
+Ero : Erotica
+GL / Yur : Girls Love / Yuri
+Hen : Hentai
 
- Info Additionnelle :
- Si à la fin du genre il est séparé et derrière le genre il y a un signe ! (point d'exclamation) + gras, cela signifie attention parce que le genre est déjà bizarre / pervers et entre généralement dans "Danger Anime Genre", alors essayez de lire d'abord et de bien comprendre" pour que si il y a quelque chose de mal ce ne soit pas la faute de l'Admin / recommandeur si vous continuez à regarder cet anime de genre dangereux 🙂
+Info Additionnelle :
+Si à la fin du genre il est séparé et derrière le genre il y a un signe ! (point d'exclamation) + gras, cela signifie attention parce que le genre est déjà bizarre / pervers et entre généralement dans "Danger Anime Genre", alors essayez de lire d'abord et de bien comprendre" pour que si il y a quelque chose de mal ce ne soit pas la faute de l'Admin / recommandeur si vous continuez à regarder cet anime de genre dangereux 🙂
 
- Avis de Non-Responsabilité :
- Toutes les listes d'Anime Normal et Certaines Listes d'Anime Hentai sont prises de ©ListAnimeKu et Certaines Listes d'Anime Hentai sont prises de ©KucingPeduli je n'écris pas tous les animes qui apparaissent :v
- Fondamentalement je prends ce que je pense être intéressant :v
+Avis de Non-Responsabilité :
+Toutes les listes d'Anime Normal et Certaines Listes d'Anime Hentai sont prises de ©ListAnimeKu et Certaines Listes d'Anime Hentai sont prises de ©KucingPeduli je n'écris pas tous les animes qui apparaissent :v
+Fondamentalement je prends ce que je pense être intéressant :v
 
- Outils : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
- \n\n""",
-             'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 Liste d'Anime Hentai et Normal
- {year}
- Membre : {member}
- 
- Informations Communes pour la liste d'Anime Hentai ©ListAnimeKu :
- - Date de Sortie
- > Titre Hentai
- ^ Studio
- ! Genre Hentai (ABSOLUMENT SECRET) Parce que je ne connais pas le genre :v
- + Nombre d'Épisodes (si disponible)
- ~ Minutes par Épisode (si disponible)
- 
- Informations Communes pour la liste d'Anime Normal :
- - Date de Sortie
- > Titre Anime
- ! Genre Anime
- + Nombre d'Épisodes (si disponible)
- ~ Minutes par Épisode (si disponible)
- 
- Genre d'Anime Dangereux:
- Adl : Adulte
- BL / Yao : Boys Love / Yaoi
- Cro : Crossdressing
- Ecc : Ecchi
- Ero : Erotica
- GL / Yur : Girls Love / Yuri
- Hen : Hentai
- 
- Info Additionnelle :
- Si à la fin du genre il est séparé et derrière le genre il y a un signe ! (point d'exclamation) + gras, cela signifie attention parce que le genre est déjà bizarre / pervers et entre généralement dans "Danger Anime Genre", alors essayez de lire d'abord et de bien comprendre" pour que si il y a quelque chose de mal ce ne soit pas la faute de l'Admin / recommandeur si vous continuez à regarder cet anime de genre dangereux 🙂
- 
- Avis de Non-Responsabilité :
- Toutes les listes d'Anime Normal et Hentai Anime List sont prises de ©ListAnimeKu
- 
- Outils : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
- \n\n""",
-             'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 Liste d'Anime Hentai
- {first_month - last_month} {year}
- Dernières Informations :
- Le calendrier dans la liste ©KucingPeduli est seulement {nekopoi_month} mois (avec {month_has_passed} mois passés, {ahead_text})
- 
- Informations Communes pour la liste d'Anime Hentai ©KucingPeduli :
- - Date de Sortie
- > Titre Hentai
- ^ Studio
- ! Genre Hentai (ABSOLUMENT SECRET) Parce que je ne connais pas le genre :v
- + Épisodes à sortir (Signifiant quel épisode sera sorti à cette date dans ©KucingPeduli)
- 
- Outils : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
- \n\n""",
+Outils : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
+\n\n""",
+
+'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 Liste d'Anime Hentai et Normal
+{year}
+Membre : {member}
+
+Informations Communes pour la liste d'Anime Hentai ©ListAnimeKu :
+- Date de Sortie
+> Titre Hentai
+^ Studio
+! Genre Hentai (ABSOLUMENT SECRET) Parce que je ne connais pas le genre :v
++ Nombre d'Épisodes (si disponible)
+~ Minutes par Épisode (si disponible)
+
+Informations Communes pour la liste d'Anime Normal :
+- Date de Sortie
+> Titre Anime
+! Genre Anime
++ Nombre d'Épisodes (si disponible)
+~ Minutes par Épisode (si disponible)
+
+Genre d'Anime Dangereux :
+Adl : Adulte
+BL / Yao : Boys Love / Yaoi
+Cro : Crossdressing
+Ecc : Ecchi
+Ero : Erotica
+GL / Yur : Girls Love / Yuri
+Hen : Hentai
+
+Info Additionnelle :
+Si à la fin du genre il est séparé et derrière le genre il y a un signe ! (point d'exclamation) + gras, cela signifie attention parce que le genre est déjà bizarre / pervers et entre généralement dans "Danger Anime Genre", alors essayez de lire d'abord et de bien comprendre" pour que si il y a quelque chose de mal ce ne soit pas la faute de l'Admin / recommandeur si vous continuez à regarder cet anime de genre dangereux 🙂
+
+Avis de Non-Responsabilité :
+Toutes les listes d'Anime Normal et Hentai Anime List sont prises de ©ListAnimeKu
+
+Outils : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
+\n\n""",
+
+'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 Liste d'Anime Hentai
+{year}
+
+Dernières Informations :
+Le calendrier dans la liste ©KucingPeduli est seulement {nekopoi_month} mois {schedule_info}
+
+Informations Communes pour la liste d'Anime Hentai ©KucingPeduli :
+- Date de Sortie
+> Titre Hentai
+^ Studio
+! Genre Hentai (ABSOLUMENT SECRET) Parce que je ne connais pas le genre :v
++ Épisodes à sortir (Signifiant quel épisode sera sorti à cette date dans ©KucingPeduli)
+
+Outils : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
+\n\n""",
              'note_text': "NOTE : Le calendrier peut ne pas être complet, veuillez attendre la mise à jour de l'admin\n",
             'last_update_text': "Dernière mise à jour : {nekopoi_last_update}\n\n",
             'no_anime_text': "\nAucun anime ne répond aux critères\n",
             'hentai_list_title': "*Liste d'Anime Hentai ©ListAnimeKu*\n",
             'erotica_list_title': "*Liste d'Anime Érotica ©ListAnimeKu*\n",
             'normal_list_title': "*Liste d'Anime Normal*\n",
-            'none_text': "_*AUCUN*_\n\n"
+            'none_text': "_*AUCUN*_\n\n",
+            'language_change_message': 'Vous utilisez actuellement {lang_now} et passerez à {lang_targeted}, veuillez recharger'
         }
 
         # German translations
@@ -1120,12 +1170,12 @@ Hen : Hentai
             'scrape_nekopoi_option': 'Nekopoi',
             'scrape_both_option': 'Beide',
             'header_template_both': """{season} Hentai und normale Anime-Liste
-
 {year}
 Mitglied : {member}
 
 Neueste Informationen :
-Hinweis : Die Hentai-Anime, die ich nehme, kommen aus 2 Quellen, die klar zeigen, welcher zuerst veröffentlicht wird :v also trenne ich die Liste, damit du nicht verwirrt wirst. Ach ja, der Zeitplan in der ©KucingPeduli-Liste ist nur {nekopoi_month} Monate (mit {month_has_passed} Monaten vergangen, {ahead_text})
+Hinweis : Die Hentai-Anime, die ich nehme, kommen aus 2 Quellen, die klar zeigen, welcher zuerst veröffentlicht wird :v also trenne ich die Liste, damit du nicht verwirrt wirst.
+Ach ja, der Zeitplan in der ©KucingPeduli-Liste ist nur {nekopoi_month} Monate {schedule_info}
 
 Gemeinsame Informationen für Hentai ©ListAnimeKu Anime-Liste :
 - Veröffentlichungsdatum
@@ -1166,8 +1216,10 @@ Alle normalen Anime-Listen und einige Hentai-Anime-Listen werden von ©ListAnime
 Grundsätzlich nehme ich was ich interessant finde :v
 
 Tools : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 Hentai und normale Anime-Liste
+
+'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 Hentai und normale Anime-Liste
 {year}
 Mitglied : {member}
 
@@ -1202,11 +1254,14 @@ Haftungsausschluss :
 Alle normalen Anime-Listen und Hentai Anime List sind genommen von ©ListAnimeKu
 
 Tools : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 Hentai Anime-Liste
-{first_month - last_month} {year}
+
+'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 Hentai Anime-Liste
+{year}
+
 Neueste Informationen :
-Der Zeitplan in der ©KucingPeduli-Liste ist nur {nekopoi_month} Monate (mit {month_has_passed} Monaten vergangen, {ahead_text})
+Der Zeitplan in der ©KucingPeduli-Liste ist nur {nekopoi_month} Monate {schedule_info}
 
 Gemeinsame Informationen für Hentai ©KucingPeduli Anime-Liste :
 - Veröffentlichungsdatum
@@ -1216,6 +1271,7 @@ Gemeinsame Informationen für Hentai ©KucingPeduli Anime-Liste :
 + Zu veröffentlichende Episoden (Bedeutung welche Episode an diesem Datum in ©KucingPeduli veröffentlicht wird)
 
 Tools : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
             'note_text': "HINWEIS : Der Zeitplan ist möglicherweise nicht vollständig, bitte warte auf Admin-Update\n",
             'last_update_text': "Letzte Aktualisierung : {nekopoi_last_update}\n\n",
@@ -1223,7 +1279,8 @@ Tools : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
             'hentai_list_title': "*Hentai-Anime-Liste ©ListAnimeKu*\n",
             'erotica_list_title': "*Erotica-Anime-Liste ©ListAnimeKu*\n",
             'normal_list_title': "*Normale Anime-Liste*\n",
-            'none_text': "_*KEINE*_\n\n"
+            'none_text': "_*KEINE*_\n\n",
+            'language_change_message': 'Sie verwenden derzeit {lang_now} und werden zu {lang_targeted} wechseln, bitte neu laden'
         }
 
         # Portuguese translations
@@ -1272,12 +1329,12 @@ Tools : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
             'scrape_nekopoi_option': 'Nekopoi',
             'scrape_both_option': 'Ambos',
             'header_template_both': """{season} Lista de Anime Hentai e Normal
-
 {year}
 Membro : {member}
 
 Últimas Informações :
-Nota : Os animes hentai que eu pego vêm de 2 fontes, que claramente mostram qual será lançado primeiro :v então eu separo a lista para não te confundir. Ah sim, o cronograma na lista ©KucingPeduli é apenas {nekopoi_month} meses (com {month_has_passed} meses passados, {ahead_text})
+Nota : Os animes hentai que eu pego vêm de 2 fontes, que claramente mostram qual será lançado primeiro :v então eu separo a lista para não te confundir.
+Ah sim, o cronograma na lista ©KucingPeduli é apenas {nekopoi_month} meses {schedule_info}
 
 Informações Comuns para a lista de Anime Hentai ©ListAnimeKu :
 - Data de Lançamento
@@ -1318,8 +1375,10 @@ Todas as listas de Anime Normal e Algumas Listas de Anime Hentai são tiradas de
 Básicamente eu pego o que acho interessante :v
 
 Ferramentas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 Lista de Anime Hentai e Normal
+
+'header_template_mal': """𝙼𝚢𝙰𝚗𝚒𝚖𝚎𝙻𝚒𝚜𝚝 Lista de Anime Hentai e Normal
 {year}
 Membro : {member}
 
@@ -1354,11 +1413,14 @@ Isenção de Responsabilidade :
 Todas as listas de Anime Normal e Hentai Anime List são tiradas de ©ListAnimeKu
 
 Ferramentas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
-            'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 Lista de Anime Hentai
-{first_month - last_month} {year}
+
+'header_template_nekopoi': """𝙽𝚎𝚔𝚘𝙿𝚘𝚒 Lista de Anime Hentai
+{year}
+
 Últimas Informações :
-O cronograma na lista ©KucingPeduli é apenas {nekopoi_month} meses (com {month_has_passed} meses passados, {ahead_text})
+O cronograma na lista ©KucingPeduli é apenas {nekopoi_month} meses {schedule_info}
 
 Informações Comuns para a lista de Anime Hentai ©KucingPeduli :
 - Data de Lançamento
@@ -1368,6 +1430,7 @@ Informações Comuns para a lista de Anime Hentai ©KucingPeduli :
 + Episódios a serem lançados (Significado qual episódio será lançado nesta data em ©KucingPeduli)
 
 Ferramentas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
+Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
 \n\n""",
             'note_text': "NOTA : O cronograma pode não estar completo, por favor aguarde a atualização do admin\n",
             'last_update_text': "Última Atualização : {nekopoi_last_update}\n\n",
@@ -1375,7 +1438,8 @@ Ferramentas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
             'hentai_list_title': "*Lista de Anime Hentai ©ListAnimeKu*\n",
             'erotica_list_title': "*Lista de Anime Erótica ©ListAnimeKu*\n",
             'normal_list_title': "*Lista de Anime Normal*\n",
-            'none_text': "_*NENHUM*_\n\n"
+            'none_text': "_*NENHUM*_\n\n",
+            'language_change_message': 'Você está atualmente usando {lang_now} e mudará para {lang_targeted}, por favor recarregue'
         }
 
     def set_language(self, lang):
@@ -1385,14 +1449,14 @@ Ferramentas : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
             return True
         return False
 
-    def get(self, key, **kwargs):
+    def get(self, key, default=None, **kwargs):
         """Get translated text"""
         if self.current_lang in self.translations and key in self.translations[self.current_lang]:
             text = self.translations[self.current_lang][key]
             if kwargs:
                 text = text.format(**kwargs)
             return text
-        return key  # Return key if translation not found
+        return default if default is not None else key  # Return default if provided, else key
 
     def get_available_languages(self):
         """Get list of available languages"""

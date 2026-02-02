@@ -17,8 +17,8 @@ import random
 import logging
 import random
 
-# Import existing functions from the main script
-from MyAnimeList_and_Nekopoi_Scrapper import (
+# Import functions for GUI
+from gui_functions import (
     scrape_mal_seasonal, scrape_nekopoi, save_to_file, translate_month,
     parse_date_flexible, parse_member_count, get_anime_data, loading_animation,
     print_status, tampilkan_header, DANGER_GENRES, EPS_REGEX, DURATION_REGEX
@@ -39,7 +39,21 @@ class AnimeScraperGUI:
 
         # Variables
         self.year_var = tk.StringVar(value=str(datetime.now().year))
-        self.season_var = tk.StringVar(value="fall")
+        # Automatically set default season based on current month
+        current_month = datetime.now().month
+        if 1 <= current_month <= 3:
+            default_season_slug = "winter"
+        elif 4 <= current_month <= 6:
+            default_season_slug = "spring"
+        elif 7 <= current_month <= 9:
+            default_season_slug = "summer"
+        else:
+            default_season_slug = "fall"
+        # Get the localized season name
+        season_names = i18n.get('season_names')
+        seasons = i18n.get('seasons')
+        default_season_display = season_names[seasons.index(default_season_slug)]
+        self.season_var = tk.StringVar(value=default_season_display)
         self.member_threshold_var = tk.StringVar(value="10000")
         self.output_format_var = tk.StringVar(value="txt")
         self.scraped_data = {}
@@ -68,7 +82,7 @@ class AnimeScraperGUI:
         main_frame.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         # Input section
-        input_frame = ttk.LabelFrame(main_frame, text=i18n.get('input_parameters', default="Input Parameters"), padding="10")
+        input_frame = ttk.LabelFrame(main_frame, text=i18n.get('input_parameters'), padding="10")
         input_frame.grid(row=0, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
 
         # Year
@@ -94,7 +108,7 @@ class AnimeScraperGUI:
         format_combo.grid(row=3, column=1, sticky=(tk.W, tk.E), pady=2)
 
         # Scrape Options
-        ttk.Label(input_frame, text=i18n.get('scrape_options_label', default="Scrape Options:")).grid(row=4, column=0, sticky=tk.W, pady=2)
+        ttk.Label(input_frame, text=i18n.get('scrape_options_label')).grid(row=4, column=0, sticky=tk.W, pady=2)
         self.scrape_option_var = tk.StringVar(value=i18n.get('scrape_both_option') if self.current_lang == 'id' else i18n.get('scrape_mal_option'))
         self.scrape_combo = ttk.Combobox(input_frame, textvariable=self.scrape_option_var,
                                         values=[i18n.get('scrape_mal_option'), i18n.get('scrape_nekopoi_option'), i18n.get('scrape_both_option')],
@@ -173,11 +187,15 @@ class AnimeScraperGUI:
     def scrape_data(self):
         try:
             year = int(self.year_var.get())
-            season = self.season_var.get()
+            season_display = self.season_var.get()
+            # Map localized season name back to English slug
+            season_names = i18n.get('season_names')
+            seasons = i18n.get('seasons')
+            season = seasons[season_names.index(season_display)]
             threshold = int(self.member_threshold_var.get())
             option = self.scrape_option_var.get()
-            scrape_mal = option == i18n.get('scrape_mal_option') or option == i18n.get('scrape_both_option')
-            scrape_nekopoi = option == i18n.get('scrape_nekopoi_option') or option == i18n.get('scrape_both_option')
+            do_scrape_mal = option == i18n.get('scrape_mal_option') or option == i18n.get('scrape_both_option')
+            do_scrape_nekopoi = option == i18n.get('scrape_nekopoi_option') or option == i18n.get('scrape_both_option')
 
             anime_data = {}
             nekopoi_data = {}
@@ -185,21 +203,31 @@ class AnimeScraperGUI:
             categories = {}
 
             # Scrape MAL if selected
-            if scrape_mal:
+            if do_scrape_mal:
                 # Construct URL
                 url = f"https://myanimelist.net/anime/season/{year}/{season}"
 
                 # Scrape MAL
                 self.progress_var.set(i18n.get('scraping_mal'))
-                anime_data, categories = scrape_mal_seasonal(url)
+                try:
+                    anime_data, categories = scrape_mal_seasonal(url)
+                except UnboundLocalError as e:
+                    raise Exception(f"MAL scraping failed: Animation thread error - {str(e)}")
+                except Exception as e:
+                    raise Exception(f"MAL scraping failed: {str(e)}")
 
             # Scrape Nekopoi if selected
-            if scrape_nekopoi:
+            if do_scrape_nekopoi:
                 self.progress_var.set(i18n.get('scraping_nekopoi'))
-                nekopoi_data, nekopoi_last_update = scrape_nekopoi()
+                try:
+                    nekopoi_data, nekopoi_last_update = scrape_nekopoi()
+                except UnboundLocalError as e:
+                    raise Exception(f"Nekopoi scraping failed: Animation thread error - {str(e)}")
+                except Exception as e:
+                    raise Exception(f"Nekopoi scraping failed: {str(e)}")
 
             # Validate that at least one source was selected
-            if not scrape_mal and not scrape_nekopoi:
+            if not do_scrape_mal and not do_scrape_nekopoi:
                 raise Exception(i18n.get('no_source_selected', default="Please select at least one data source to scrape"))
 
             # Store data
@@ -233,19 +261,25 @@ class AnimeScraperGUI:
 
         preview = f"MyAnimeList: {mal_count} entries\nNekopoi: {nekopoi_count} entries\n\n"
 
-        # Show sample entries
+        # Show all MAL entries
         if self.scraped_data:
-            preview += "Sample MAL entries:\n"
-            for date, animes in list(self.scraped_data.items())[:3]:
-                for anime in animes[:2]:
-                    preview += f"- {anime['title']} ({date})\n"
-                break
+            preview += "MyAnimeList Data:\n"
+            for date in sorted(self.scraped_data.keys()):
+                animes = self.scraped_data[date]
+                preview += f"{date}:\n"
+                for anime in animes:
+                    preview += f"  - {anime['title']}\n"
+                preview += "\n"
 
+        # Show all Nekopoi entries
         if self.nekopoi_data:
-            preview += "\nSample Nekopoi entries:\n"
-            for date, entries in list(self.nekopoi_data.items())[:2]:
-                for entry in entries[:2]:
-                    preview += f"- {entry['title']} ({date})\n"
+            preview += "Nekopoi Data:\n"
+            for date in sorted(self.nekopoi_data.keys()):
+                entries = self.nekopoi_data[date]
+                preview += f"{date}:\n"
+                for entry in entries:
+                    preview += f"  - {entry['title']}\n"
+                preview += "\n"
 
         self.results_text.insert(tk.END, preview)
 
@@ -269,7 +303,7 @@ class AnimeScraperGUI:
             else:
                 usage_str = f"{total_kb} KB"
 
-            self.data_usage_var.set(f"{i18n.get('data_usage_label', default='Data Usage:')} {usage_str}")
+            self.data_usage_var.set(f"{i18n.get('data_usage_label')} {usage_str}")
 
         except Exception as e:
             self.data_usage_var.set(f"{i18n.get('data_usage_label', default='Data Usage:')} Unknown")
@@ -320,7 +354,14 @@ class AnimeScraperGUI:
         try:
             threshold = int(self.member_threshold_var.get())
             year = int(self.year_var.get())
-            season_name = {"winter": "Musim Dingin", "spring": "Semi", "summer": "Panas", "fall": "Gugur"}.get(self.season_var.get(), self.season_var.get())
+            
+            season_display = self.season_var.get()
+            season_names = i18n.get('season_names')
+            seasons = i18n.get('seasons')
+            
+            season_index = season_names.index(season_display)
+            season = seasons[season_index] 
+            season_name = season_display 
 
             # Determine header template based on scrape option
             option = self.scrape_option_var.get()
@@ -561,7 +602,24 @@ class AnimeScraperGUI:
                 # Update scrape options
                 self.scrape_combo['values'] = [i18n.get('scrape_mal_option'), i18n.get('scrape_nekopoi_option'), i18n.get('scrape_both_option')]
                 self.scrape_option_var.set(i18n.get('scrape_both_option') if lang_code == 'id' else i18n.get('scrape_mal_option'))
-                self.refresh_ui_texts()
+                # Destroy all widgets and recreate
+                for widget in self.root.winfo_children():
+                    widget.destroy()
+                self.create_widgets()
+                # Set the default season for the new language
+                current_month = datetime.now().month
+                if 1 <= current_month <= 3:
+                    default_season_slug = "winter"
+                elif 4 <= current_month <= 6:
+                    default_season_slug = "spring"
+                elif 7 <= current_month <= 9:
+                    default_season_slug = "summer"
+                else:
+                    default_season_slug = "fall"
+                season_names = i18n.get('season_names')
+                seasons = i18n.get('seasons')
+                default_season_display = season_names[seasons.index(default_season_slug)]
+                self.season_var.set(default_season_display)
 
     def refresh_ui_texts(self):
         """Refresh all UI text elements with new language"""
