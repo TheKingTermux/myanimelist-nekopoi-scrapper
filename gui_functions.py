@@ -1,13 +1,14 @@
-import requests
 from bs4 import BeautifulSoup
-import re
-import os
+import cloudscraper
 from datetime import datetime
-import time
-import random
 import logging
-import threading
+import os
+import random
+import re
+import requests
 import sys
+import threading
+import time
 
 # Configure logging to not interfere with animation
 logging.basicConfig(level=logging.INFO, format='%(message)s')
