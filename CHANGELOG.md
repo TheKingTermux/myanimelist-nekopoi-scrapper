@@ -26,7 +26,7 @@
 ### Fixed
 - N/A (initial release)
 
-## [11.1] - 2025-09-30
+## [11.1] - 2025-09-16
 
 ### Added
 - Script source
@@ -39,7 +39,7 @@
 - Change EN Main Script to same as ID Main Script
 - Change Phrase
 
-## [12] - 2025-10-13
+## [12] - 2025-09-16
 
 ### Added
 - Added global data_usage and session_data_usage variables.
@@ -127,6 +127,49 @@
 - GUI now supports dynamic header selection based on scrape mode
 - Tested with all 9 languages; no placeholder errors during save
 - Recommended for users upgrading from v13: Replace localization.py fully, update gui_functions.py save_to_file logic
+
+## [15] - 2026-05-09
+
+### Added
+- **Major GUI Improvements** (`gui_scraper.py` & `gui_functions.py`):
+  - Full multi-language support (9 bahasa): Indonesia, English, Japanese, Spanish, Chinese, Korean, French, German, Portuguese.
+  - Dynamic header template selection berdasarkan pilihan scraping (`MAL Only`, `Nekopoi Only`, `Both`).
+  - Advanced Filter & Search window (by title, genre, studio, minimum members).
+  - Results preview langsung di GUI.
+  - Multi-format export: **TXT, JSON, CSV, PDF**.
+  - Better progress bar, data usage display, dan error handling.
+
+- **Improved CLI Version**:
+  - Random User-Agent rotation to avoid detection.
+  - Retry mechanism with exponential backoff in `scrape_mal_seasonal()`.
+  - The CLI is now at **Version 15**.
+  - More informative logging (number of Hentai, Erotica, and Nekopoi).
+
+- **Localization System** (`localization.py`):
+  - Separate header templates for each scraping mode (`header_template_both`, `header_template_mal`, `header_template_nekopoi`).
+  - More consistent placeholders `{nekopoi_month}` and `{schedule_info}` across all languages.
+
+- **Stability Improvements**:
+  - Cloudscraper is now used exclusively for Nekopoi (it no longer affects MAL).
+  - Improved thread management for loading animations.
+  - More accurate data usage tracking.
+
+### Changes
+- The output header is now cleaner and more consistent across languages.
+- The default season in the GUI automatically matches the current month.
+- The code structure is now more modular (separating the GUI, functions, and localization).
+- The English version (`MyAnimeList_and_Nekopoi_Scrapper_English.py`) has been updated to reflect the latest changes.
+
+### Fixed
+- Issues with header placeholders that frequently caused errors (`{first_month - last_month}`, `{ahead_text}`, etc.).
+- Indentation and variable scope in Nekopoi's month calculations.
+- Animation thread conflict when scraping fails.
+- Several bugs in the GUI language switching.
+
+### Technical Notes
+- **Cloudscraper** is still used exclusively for Nekopoi (best practice).
+- All changes are backward compatible.
+- The GUI is now much more user-friendly and production-ready.
 
 ---
 

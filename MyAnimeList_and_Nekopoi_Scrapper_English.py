@@ -1,13 +1,14 @@
-import requests
 from bs4 import BeautifulSoup
-import re
-import os
+import cloudscraper
 from datetime import datetime
-import time
-import random
 import logging
-import threading
+import os
+import random
+import re
+import requests
 import sys
+import threading
+import time
 
 # Configure logging to not interfere with animation
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -141,159 +142,117 @@ def get_anime_data(entry):
         logging.error(f"Error processing entry: {str(e)}")
         return None
 
-def scrape_nekopoi(max_retries=3, use_proxy=False, proxy_list=None):
-    """Fetch hentai schedule from Nekopoi.care with retry and proxy support"""
+def scrape_nekopoi():
+    """Scraping the Nekopoi hentai schedule"""
     global loading_active, data_usage, session_data_usage
+    
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
+        'Referer': 'https://nekopoi.care/',
     }
 
-    for attempt in range(max_retries):
-        try:
-            print_status()
-            # Start loading animation in separate thread
-            loading_active = True
-            animation_thread = threading.Thread(target=loading_animation, args=("🔄 Fetching Nekopoi hentai schedule...",))
-            animation_thread.daemon = True
-            animation_thread.start()
+    try:
+        print_status(continuous=True)
+        loading_active = True
+        animation_thread = threading.Thread(target=loading_animation, args=("🔄 Scraping the Nekopoi hentai schedule...",))
+        animation_thread.daemon = True
+        animation_thread.start()
 
-            time.sleep(random.uniform(3, 7))
+        # Buat scraper khusus untuk Nekopoi saja
+        scraper = cloudscraper.create_scraper(
+            browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False}
+        )
 
-            # Setup proxy if enabled
-            proxies = None
-            if use_proxy and proxy_list:
-                proxy = random.choice(proxy_list)
-                proxies = {
-                    'http': proxy,
-                    'https': proxy
-                }
+        response = scraper.get(
+            "https://nekopoi.care/jadwal-new-hentai/", 
+            headers=headers, 
+            timeout=60
+        )
+        
+        response.raise_for_status()
+        data_usage += len(response.content)
+        session_data_usage += len(response.content)
 
-            response = requests.get("https://nekopoi.care/jadwal-new-hentai/", headers=headers, timeout=15, proxies=proxies)
-            response.raise_for_status()
-            data_usage += len(response.content)
-            session_data_usage += len(response.content)
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-            soup = BeautifulSoup(response.text, 'html.parser')
+        nekopoi_data = {}
+        spoiler_bodies = soup.find_all('div', class_='spoiler-body')
 
-            # Find all spoiler bodies containing hentai entries
-            nekopoi_data = {}
+        for spoiler_body in spoiler_bodies:
+            entries = spoiler_body.find_all('div', class_='coming_soon')
 
-            # Get all spoiler-body elements
-            spoiler_bodies = soup.find_all('div', class_='spoiler-body')
-
-            for spoiler_body in spoiler_bodies:
-                # Find all hentai entries in this spoiler
-                entries = spoiler_body.find_all('div', recursive=False)
-
-                for entry in entries:
-                    try:
-                        # Title
-                        title_tag = entry.select_one('h2:nth-child(1) > a')
-                        title = title_tag.get_text(strip=True) if title_tag else None
-
-                        if not title:
-                            continue
-
-                        # Episode
-                        eps_tag = entry.select_one('h2:nth-child(1) > span')
-                        eps_text = eps_tag.get_text(strip=True) if eps_tag else ''
-                        # Extract episode number
-                        eps_match = re.search(r'Episode (\d+)', eps_text)
-                        eps_num = int(eps_match.group(1)) if eps_match else 1
-
-                        # Release Date
-                        date_tag = entry.select_one('h2:nth-child(3) > span.release_date')
-                        release_date = date_tag.get_text(strip=True) if date_tag else None
-
-                        if not release_date:
-                            continue
-
-                        # Studio/Producer (try several approaches)
-                        studio = 'Unknown'
-
-                        # Try specific selector first
-                        studio_tag = entry.select_one('h2:nth-child(3) > span:nth-child(1) > span > span')
-                        if studio_tag:
-                            studio = studio_tag.get_text(strip=True)
-
-                        # If not found, search for "Producer / Label :" pattern
-                        if studio == 'Unknown':
-                            # Search for text containing "Producer / Label :"
-                            producer_text = entry.find(text=lambda text: text and 'Producer / Label :' in text)
-                            if producer_text:
-                                # Extract studio name after "Producer / Label :"
-                                text_parts = producer_text.split('Producer / Label :')
-                                if len(text_parts) > 1:
-                                    studio = text_parts[1].strip()
-
-                        # Group by release date
-                        if release_date not in nekopoi_data:
-                            nekopoi_data[release_date] = {}
-
-                        if title not in nekopoi_data[release_date]:
-                            nekopoi_data[release_date][title] = {'episodes': [eps_num], 'studio': studio}
-                        else:
-                            # Update studio if found and previously Unknown
-                            if studio != 'Unknown' and nekopoi_data[release_date][title]['studio'] == 'Unknown':
-                                nekopoi_data[release_date][title]['studio'] = studio
-                            nekopoi_data[release_date][title]['episodes'].append(eps_num)
-
-                    except Exception as e:
-                        logging.warning(f"Error parsing Nekopoi entry: {str(e)}")
+            for entry in entries:
+                try:
+                    title_tag = entry.select_one('h2 a.title')
+                    title = title_tag.get_text(strip=True) if title_tag else None
+                    if not title: 
                         continue
 
-            # Process data to combine episodes
-            processed_data = {}
-            for date, titles in nekopoi_data.items():
-                processed_data[date] = []
-                for title, data in titles.items():
-                    episodes = data['episodes']
-                    studio = data['studio']
-                    episodes.sort()
-                    if len(episodes) == 1:
-                        eps_str = f"Episode {episodes[0]}"
-                    elif len(episodes) == 2:
-                        eps_str = f"Episode {episodes[0]} & {episodes[1]}"
+                    eps_tag = entry.select_one('span.episode')
+                    eps_text = eps_tag.get_text(strip=True) if eps_tag else ''
+                    eps_match = re.search(r'Episode?\s*(\d+)', eps_text, re.I)
+                    eps_num = int(eps_match.group(1)) if eps_match else 1
+
+                    date_tag = entry.select_one('span.release_date')
+                    release_date = date_tag.get_text(strip=True) if date_tag else None
+                    if not release_date: 
+                        continue
+
+                    studio = 'Unknown'
+                    studio_tag = entry.select_one('span[style*="b679f2"]')
+                    if studio_tag:
+                        studio = studio_tag.get_text(strip=True)
+
+                    if release_date not in nekopoi_data:
+                        nekopoi_data[release_date] = {}
+                    
+                    if title not in nekopoi_data[release_date]:
+                        nekopoi_data[release_date][title] = {'episodes': [eps_num], 'studio': studio}
                     else:
-                        eps_str = f"Episode {episodes[0]} - {episodes[-1]}"
+                        if studio != 'Unknown':
+                            nekopoi_data[release_date][title]['studio'] = studio
+                        nekopoi_data[release_date][title]['episodes'].append(eps_num)
 
-                    processed_data[date].append({
-                        'title': title,
-                        'episodes': eps_str,
-                        'studio': studio
-                    })
+                except:
+                    continue
 
-            # Get last update date
-            last_update_tag = soup.select_one('#content > div.postsbody > div > div.contentpost > p:nth-child(14) > span > em > strong')
-            last_update = "Unknown"
-            if last_update_tag:
-                last_update_text = last_update_tag.get_text(strip=True)
-                # Extract date from format like "[Last Update 18 August 2025]"
-                date_match = re.search(r'(\d{1,2}\s+\w+\s+\d{4})', last_update_text)
-                if date_match:
-                    last_update = date_match.group(1)
+        # Proses data
+        processed_data = {}
+        for date, titles in nekopoi_data.items():
+            processed_data[date] = []
+            for title, data in titles.items():
+                eps = sorted(data['episodes'])
+                eps_str = f"Episode {eps[0]}" if len(eps) == 1 else f"Episode {eps[0]} - {eps[-1]}"
+                processed_data[date].append({
+                    'title': title,
+                    'episodes': eps_str,
+                    'studio': data['studio']
+                })
 
-            # Stop loading animation
-            loading_active = False
-            time.sleep(0.2)  # Give time for animation thread to finish
+        # Last Update
+        last_update = "Unknown"
+        update_tag = soup.find(string=re.compile(r'Last Update', re.I))
+        if update_tag:
+            match = re.search(r'Update Terakhir[:\s]*(\d{1,2}\s+\w+\s+\d{4})', str(update_tag))
+            if match:
+                last_update = match.group(1)
+
+        loading_active = False
+        time.sleep(0.3)
+        if 'animation_thread' in locals():
             animation_thread.join()
 
-            logging.info(f"\n🔍 Found Nekopoi entries for {len(processed_data)} dates")
-            return processed_data, last_update
+        logging.info(f"✅ Nekopoi: {sum(len(v) for v in processed_data.values())} schedule successfully retrieved")
+        return processed_data, last_update
 
-        except Exception as e:
-            # Stop loading animation
-            loading_active = False
-            time.sleep(0.2)  # Give time for animation thread to finish
+    except Exception as e:
+        loading_active = False
+        if 'animation_thread' in locals():
             animation_thread.join()
-
-            if attempt < max_retries - 1:
-                logging.warning(f"❌ Attempt {attempt + 1} failed: {str(e)}. Retrying...")
-                time.sleep(2 ** attempt)  # Exponential backoff
-            else:
-                logging.error(f"❌ All {max_retries} attempts failed. Last error: {str(e)}")
-                return {}, "Unknown"
+        logging.error(f"❌ Error scraping Nekopoi: {str(e)}")
+        return {}, "Unknown"
 
 def print_status(scraping_start_time=None, continuous=False):
     """Print scrapping time, data usage, and current time."""
@@ -759,7 +718,7 @@ def tampilkan_header():
     """Display program header"""
     logging.info("="*65)
     logging.info("               MyAnimeList and NekoPoi SCRAPPER")
-    logging.info("                  VERSION 14 - TheKingTermux")
+    logging.info("                  VERSION 15 - TheKingTermux")
     logging.info("="*65)
     logging.info(" This script will fetch seasonal anime data from MyAnimeList")
     logging.info("   Normal and Hentai and will fetch Hentai anime data from")
@@ -878,7 +837,7 @@ def main():
 
     # Calculate default name
     selected_season_english = season_url_map.get(selected_season, selected_season).capitalize()
-    default_name = f"{selected_season_english}{year}.txt"
+    default_name = f"{selected_season_english}{year}EN.txt"
     if member_threshold != 10000:
         threshold_str = f"{member_threshold // 1000}K" if member_threshold % 1000 == 0 else str(member_threshold)
         default_name = default_name.replace('.txt', f'Member{threshold_str}.txt')
@@ -897,10 +856,10 @@ def main():
     # Save to file
     if not custom_name:
         selected_season_english = season_url_map.get(selected_season, selected_season).capitalize()
-        custom_name = f"{selected_season_english}{year}.txt"
+        custom_name = f"{selected_season_english}{year}EN.txt"
         if member_threshold != 10000:
             threshold_str = f"{member_threshold // 1000}K" if member_threshold % 1000 == 0 else str(member_threshold)
-            custom_name = custom_name.replace('.txt', f'Member{threshold_str}.txt')
+            custom_name = custom_name.replace('.txt', f'Member{threshold_str}EN.txt')
     else:
         if not custom_name.lower().endswith(".txt"):
             custom_name += ".txt"
