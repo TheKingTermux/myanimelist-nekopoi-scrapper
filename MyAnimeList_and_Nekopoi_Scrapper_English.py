@@ -141,13 +141,16 @@ def get_anime_data(entry):
     except Exception as e:
         logging.error(f"Error processing entry: {str(e)}")
         return None
+    
+def user_agent(): 
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 YaBrowser/25.12.3.1141 Yowser/2.5 Safari/537.36'
 
 def scrape_nekopoi():
     """Scraping the Nekopoi hentai schedule"""
     global loading_active, data_usage, session_data_usage
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+        'User-Agent': user_agent(),
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
         'Referer': 'https://nekopoi.care/',
@@ -160,7 +163,7 @@ def scrape_nekopoi():
         animation_thread.daemon = True
         animation_thread.start()
 
-        # Buat scraper khusus untuk Nekopoi saja
+        # Create a scraper specifically for Nekopoi only
         scraper = cloudscraper.create_scraper(
             browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False}
         )
@@ -218,7 +221,7 @@ def scrape_nekopoi():
                 except:
                     continue
 
-        # Proses data
+        # Process data
         processed_data = {}
         for date, titles in nekopoi_data.items():
             processed_data[date] = []
@@ -284,7 +287,7 @@ def scrape_mal_seasonal(url, max_retries=3, use_proxy=False, proxy_list=None):
     """Main scraping function for MyAnimeList seasonal page with retry and proxy support."""
     global loading_active, data_usage, session_data_usage
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'User-Agent': user_agent(),
         'Accept-Language': 'en-US,en;q=0.9',
     }
 
@@ -410,10 +413,10 @@ def scrape_mal_seasonal(url, max_retries=3, use_proxy=False, proxy_list=None):
                 return {}, {}
 
 def save_to_file(anime_data, categories, output_path, member_threshold=10000, nekopoi_data=None, nekopoi_last_update="Unknown", filter_year=2025, season_name="Unknown", year="2025"):
-    """Menyimpan data anime ke dalam file."""
+    """Saves anime data to file."""
 
     def parse_indo_date(date_str):
-        """Mengurai format tanggal Indonesia seperti '27 Juni 2025' ke datetime untuk pengurutan"""
+        """Parses Indonesian date format like '27 June 2025' to datetime for sorting"""
         month_map = {
             'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
             'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
@@ -426,7 +429,7 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
             return datetime(year, month, day)
         return datetime.now()  # fallback
 
-    # Hitung jumlah bulan nekopoi dari data yang di-scrape
+    # Calculate the number of nekopoi months from the scraped data
     if nekopoi_data:
         unique_months = set()
         for date in nekopoi_data.keys():
@@ -443,10 +446,10 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
                 return (y2 - y1) * 12 + (m2 - m1)
             nekopoi_month = months_diff(first_ym, last_ym) + 1
             month_has_passed = months_diff(first_ym, current_ym)
-            # Dapatkan nama bulan terakhir dalam bahasa Indonesia
+            # Get the last month name
             last_month_english = datetime(last_ym[0], last_ym[1], 1).strftime('%B')
-            last_month = translate_month(last_month_english)  # Menggunakan fungsi translate_month yang ada
-            # Tentukan teks jadwal berdasarkan apakah month_has_passed masuk akal
+            last_month = translate_month(last_month_english)  # Using the existing translate_month function
+            # Determine schedule text based on whether month_has_passed is valid
             if month_has_passed >= 0:
                 schedule_info = f"(with {month_has_passed} month has passed, and last month is {last_month})"
             else:
@@ -468,7 +471,7 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
  Member : {member}
 
  Latest Information :
- Note : The hentai anime I take comes from 2 sources, which clearly show which one will be released first :v so I separate the list so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 list is only {nekopoi_month} bulan {schedule_info}
+  Note : The hentai anime we take comes from 2 sources, which clearly show which one will be released first :v so we separate the list so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 list is only {nekopoi_month} months {schedule_info}
 
  Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
  - Release Date
@@ -505,8 +508,8 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
  If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read first and understand well" so that if there is something wrong it's not the fault of the Admin / recommender if you still watch that dangerous genre anime 🙂
 
  Disclaimer :
- All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears I write :v
- Basically I take what I think is interesting :v
+  All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears we write :v
+  Basically we take what we think is interesting :v
 
  Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
  Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
@@ -718,7 +721,7 @@ def tampilkan_header():
     """Display program header"""
     logging.info("="*65)
     logging.info("               MyAnimeList and NekoPoi SCRAPPER")
-    logging.info("                  VERSION 15 - TheKingTermux")
+    logging.info("                  VERSION 16 - TheKingTermux")
     logging.info("="*65)
     logging.info(" This script will fetch seasonal anime data from MyAnimeList")
     logging.info("   Normal and Hentai and will fetch Hentai anime data from")
@@ -826,7 +829,7 @@ def main():
     # Get selected season
     selected_season = seasons[int(season_choice)]
 
-    # Map Indonesian season to English for URL
+    # Map season to English for URL
     season_url_map = {
         "Winter": "winter",
         "Spring": "spring",

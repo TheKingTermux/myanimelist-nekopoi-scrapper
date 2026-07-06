@@ -142,23 +142,15 @@ def get_anime_data(entry):
         logging.error(f"Error memproses entri: {str(e)}")
         return None
     
-def user_agent():
-    """Menghasilkan User-Agent acak untuk menghindari blokir."""
-    user_agents = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 YaBrowser/25.12.3.1141 Yowser/2.5 Safari/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 YaBrowser/25.12.3.1141 Yowser/2.5 Safari/537.36',
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 YaBrowser/26.3.1.592 Mobile/15E148 Safari/604.1',
-        'Mozilla/5.0 (Linux; arm_64; Android 16; SM-G965F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.7632.121 YaBrowser/25.12.8.44 Mobile Safari/537.36'
-    ]
-    return random.choice(user_agents)
+def user_agent(): 
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 YaBrowser/25.12.3.1141 Yowser/2.5 Safari/537.36'
 
 def scrape_nekopoi():
     """Mengambil jadwal hentai dari Nekopoi.care"""
     global loading_active, data_usage, session_data_usage
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+        'User-Agent': user_agent(),
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
         'Referer': 'https://nekopoi.care/',
@@ -721,7 +713,7 @@ def tampilkan_header():
     """Menampilkan header program"""
     logging.info("="*65)
     logging.info("               MyAnimeList dan NekoPoi SCRAPPER")
-    logging.info("                   VERSI 15 - TheKingTermux")
+    logging.info("                   VERSI 16 - TheKingTermux")
     logging.info("="*65)
     logging.info(" Script ini akan mengambil data anime seasonal dari MyAnimeList")
     logging.info(" Normal maupun Hentai dan akan mengambil data anime Hentai dari")

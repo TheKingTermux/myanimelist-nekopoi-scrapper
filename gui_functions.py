@@ -131,12 +131,15 @@ def get_anime_data(entry):
         logging.error(f"Error processing entry: {str(e)}")
         return None
 
+def user_agent(): 
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 YaBrowser/25.12.3.1141 Yowser/2.5 Safari/537.36'
+
 def scrape_nekopoi():
     """Mengambil jadwal hentai dari Nekopoi.care"""
     global loading_active, data_usage, session_data_usage
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+        'User-Agent': user_agent(),
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
         'Referer': 'https://nekopoi.care/',
@@ -247,7 +250,7 @@ def scrape_mal_seasonal(url, max_retries=3, use_proxy=False, proxy_list=None):
     """Main scraping function for MyAnimeList seasonal page with retry and proxy support."""
     global loading_active, data_usage, session_data_usage
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'User-Agent': user_agent(),
         'Accept-Language': 'en-US,en;q=0.9',
     }
 
@@ -651,7 +654,7 @@ def tampilkan_header():
     """Display program header"""
     logging.info("="*65)
     logging.info("               MyAnimeList dan NekoPoi SCRAPPER")
-    logging.info("                   VERSI 14 - TheKingTermux")
+    logging.info("                   VERSI 16 - TheKingTermux")
     logging.info("="*65)
     logging.info(" Script ini akan mengambil data anime seasonal dari MyAnimeList")
     logging.info(" Normal maupun Hentai dan akan mengambil data anime Hentai dari")
