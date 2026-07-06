@@ -171,6 +171,15 @@
 - All changes are backward compatible.
 - The GUI is now much more user-friendly and production-ready.
 
+## [16] - 2026-07-06
+
+### Changed
+- Synchronized English script (`MyAnimeList_and_NekopoI_Scrapper_English.py`) with Indonesian script (`MyAnimeList_and_Nekopoi_Scrapper.py`) to ensure both versions have the same structure and features.
+- Verified all UI text, headers, and messages in the English version are using English language instead of Indonesian.
+
+### Fixed
+- Remaining Indonesian phrases in the English version that were not previously converted.
+
 ---
 
 ## Version Numbering
