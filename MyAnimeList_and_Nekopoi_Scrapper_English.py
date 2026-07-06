@@ -471,7 +471,7 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
  Member : {member}
 
  Latest Information :
-  Note : The hentai anime we take comes from 2 sources, which clearly show which one will be released first :v so we separate the list so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 list is only {nekopoi_month} months {schedule_info}
+Note : The hentai anime i take comes from 2 sources, which clearly show which one will be released first :v so i separate the list so you don't get confused. Oh yeah, the schedule in the ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 list is only {nekopoi_month} months {schedule_info}
 
  Common Information for Hentai ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 Anime list :
  - Release Date
@@ -508,8 +508,8 @@ def save_to_file(anime_data, categories, output_path, member_threshold=10000, ne
  If at the end of the genre it is separated and behind the genre there is a sign ! (exclamation mark) + bold, it means beware because the genre is already weird / perverted and usually that genre enters "Danger Anime Genre", so try to read first and understand well" so that if there is something wrong it's not the fault of the Admin / recommender if you still watch that dangerous genre anime 🙂
 
  Disclaimer :
-  All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears we write :v
-  Basically we take what we think is interesting :v
+All Normal Anime list and Some Hentai Anime List are taken from ©𝙻𝚒𝚜𝚝𝙰𝚗𝚒𝚖𝚎𝙺𝚞 and Some Hentai Anime List is taken from ©𝙺𝚞𝚌𝚒𝚗𝚐𝙿𝚎𝚍𝚞𝚕𝚒 not all anime that appears i write :v
+Basically i take what i think is interesting :v
 
  Tools  : https://github.com/TheKingTermux/myanimelist-nekopoi-scrapper
  Source : https://chat.whatsapp.com/CYXRhe5hGFcLpNuSpykqst
